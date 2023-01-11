@@ -1,0 +1,76 @@
+Disease	Chr	Position	Variant_id	Allele sample	Allele DB	Confident/P-value	DB
+2-hour glucose tolerance test	10	113049143	rs12255372	G>T	G>T	1.18e-14	GWASdb
+	10	113049143	rs12255372	G>T	NA	1.18e-14	GRASP
+Activated partial thromboplastin time	3	186677647	rs1042445	C>T	C>T	2.27e-08	GWASdb
+	3	186677647	rs1042445	C>T	NA	2.23e-35	GRASP
+	3	186677647	rs1042445	C>T	NA	2.27e-08	GRASP
+Breast cancer	5	1279675	rs10069690	C>T	C>T	7e-09	GWASdb
+	5	1279675	rs10069690	C>T	C>T	1e-10	GWASdb
+	5	1279675	rs10069690	C>T	C>T	5e-12	GWASdb
+	5	59041654	rs1353747	T>G	T>G	3e-08	GWASdb
+	3	4700592	rs6762644	A>G	A>G	2e-12	GWASdb
+	5	1279675	rs10069690	C>T	NA	7.2e-09	GRASP
+	5	59041654	rs1353747	T>G	NA	2.5e-08	GRASP
+	3	4700592	rs6762644	A>G	NA	2.2e-12	GRASP
+Fasting blood glucose	10	113049143	rs12255372	G>T	G>T	1.97e-18	GWASdb
+	10	113049143	rs12255372	G>T	NA	1.97e-18	GRASP
+Fasting insulin-related traits	10	113049143	rs12255372	G>T	G>T	3.67e-09	GWASdb
+Glioblastoma	5	1279675	rs10069690	C>T	NA	8e-74	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	3e-35	GWAS Catalog
+Glioma	5	1279675	rs10069690	C>T	NA	4e-20	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	3e-66	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	8e-31	GWAS Catalog
+Interstitial lung disease	5	1279675	rs10069690	C>T	C>T	3.31e-11	GWASdb
+Intracranial volume	17	45990034	rs10445337	T>C	NA	2.4e-11	GRASP
+Parkinson's disease	17	45990034	rs10445337	T>C	T>C	1.35e-08	GWASdb
+	17	45990034	rs10445337	T>C	NA	3.86e-10	GRASP
+	17	45990034	rs10445337	T>C	NA	1.35e-08	GRASP
+Primary biliary cirrhosis	17	45990034	rs10445337	T>C	T>C	2.49e-09	GWASdb
+Red blood cell traits	17	45990034	rs10445337	T>C	T>C	1.05e-08	GWASdb
+Testicular germ cell cancer	5	1279675	rs10069690	C>T	C>T	3.71e-08	GWASdb
+Type 2 diabetes	10	113049143	rs12255372	G>T	G>T	1.4e-13	GWASdb
+	10	113049143	rs12255372	G>T	G>T	1.4e-13	GWASdb
+	10	113049143	rs12255372	G>T	NA	NA	GADCDC
+	10	113049143	rs12255372	G>T	NA	NA	GADCDC
+Breast cancer (Estrogen receptor negative breast cancer)	5	1279675	rs10069690	C>T	NA	4.5e-12	GRASP
+Breast cancer (Estrogen receptor positive breast cancer)	3	4700592	rs6762644	A>G	NA	1.4e-08	GRASP
+Breast cancer (invasive breast cancer)	3	4700592	rs6762644	A>G	NA	1.2e-09	GRASP
+Fasting insulin	10	113049143	rs12255372	G>T	NA	3.67e-09	GRASP
+Fibrotic idiopathic interstitial pneumonias (pulmonary fibrosis)	5	1279675	rs10069690	C>T	NA	3.31e-11	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in cerebellum in Alzheimer's disease cases	17	45990034	rs10445337	T>C	NA	7.49e-31	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in cerebellum in Alzheimer's disease cases and controls	17	45990034	rs10445337	T>C	NA	1.31e-67	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in cerebellum in non-Alzheimer's disease samples	17	45990034	rs10445337	T>C	NA	1.97e-36	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in temporal cortex in Alzheimer's disease cases	17	45990034	rs10445337	T>C	NA	8.49e-34	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in temporal cortex in Alzheimer's disease cases and controls	17	45990034	rs10445337	T>C	NA	1.9e-41	GRASP
+Gene expression of MAPT (probeID ILMN_1710903) in temporal cortex in non-Alzheimer's disease samples	17	45990034	rs10445337	T>C	NA	5.92e-15	GRASP
+Red blood cell count (RBC)	17	45990034	rs10445337	T>C	NA	1.05e-08	GRASP
+Blood_protein_levels	3	186677647	rs1042445	C>T	NA	3e-76	GWAS Catalog
+	3	186677647	rs1042445	C>T	NA	2e-28	GWAS Catalog
+Breast_cancer	5	1279675	rs10069690	C>T	NA	7e-09	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	1e-08	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	1e-10	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	8e-17	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	5e-12	GWAS Catalog
+	5	59041654	rs1353747	T>G	NA	4e-09	GWAS Catalog
+	5	59041654	rs1353747	T>G	NA	3e-08	GWAS Catalog
+	5	59041654	rs1353747	T>G	NA	3e-08	GWAS Catalog
+	3	4700592	rs6762644	A>G	NA	9e-12	GWAS Catalog
+	3	4700592	rs6762644	A>G	NA	2e-12	GWAS Catalog
+	3	4700592	rs6762644	A>G	NA	4e-18	GWAS Catalog
+Breast_cancer(estrogen-receptor_negative)	5	1279675	rs10069690	C>T	NA	2e-10	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	2e-35	GWAS Catalog
+Breast_Cancer_in_BRCA1_mutation_carriers	5	1279675	rs10069690	C>T	NA	4e-16	GWAS Catalog
+Chronic_lymphocytic_leukemia_or_systemic_lupus_erythematosus	5	1279675	rs10069690	C>T	NA	5e-09	GWAS Catalog
+Epithelial_ovarian_cancer	5	1279675	rs10069690	C>T	NA	9e-09	GWAS Catalog
+Glioblastoma(age-stratified)	5	1279675	rs10069690	C>T	NA	5e-31	GWAS Catalog
+High-grade_serous_ovarian_cancer	5	1279675	rs10069690	C>T	NA	5e-12	GWAS Catalog
+Invasive_epithelial_ovarian_cancer	5	1279675	rs10069690	C>T	NA	3e-08	GWAS Catalog
+Low-grade_serous_and_serous_borderline_ovarian_cancer	5	1279675	rs10069690	C>T	NA	1e-09	GWAS Catalog
+Non-glioblastoma_glioma	5	1279675	rs10069690	C>T	NA	1e-16	GWAS Catalog
+Serous_borderline_ovarian_cancer	5	1279675	rs10069690	C>T	NA	4e-09	GWAS Catalog
+Serous_invasive_ovarian_cancer	5	1279675	rs10069690	C>T	NA	2e-12	GWAS Catalog
+Systolic_blood_pressure	5	1279675	rs10069690	C>T	NA	3e-12	GWAS Catalog
+	5	1279675	rs10069690	C>T	NA	4e-21	GWAS Catalog
+Uterine_fibroids	5	1279675	rs10069690	C>T	NA	4e-18	GWAS Catalog
+Diabetes Mellitus, Type 2	10	113049143	rs12255372	G>T	NA	NA	GADCDC
+diabetes, type 2	10	113049143	rs12255372	G>T	NA	NA	GADCDC
