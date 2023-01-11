@@ -33,9 +33,10 @@ devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 
 This is a basic example which shows you how to solve a common problem:
 
+
 ```{r example}
 library(DisVar)
-## basic example code
+DisVar("file_name.vcf", skip = 28)
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
