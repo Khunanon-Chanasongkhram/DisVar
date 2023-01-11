@@ -26,13 +26,13 @@ devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 
 ## Usage
 
-The main function in the package is ‘DisVar()’, which takes two
+The main function in the package is `DisVar()`, which takes two
 arguments:
 
-• ‘file’: the name of the VCF file.
+- `file`: the name of the VCF file.
 
-• ‘skip’: the number of lines to skip at the beginning of the VCF file.
-(default: 0)
+- `skip`: the number of lines to skip at the beginning of the VCF file.
+  (default: 0)
 
 The function returns a data frame containing variant information from
 various databases.
@@ -58,8 +58,8 @@ DisVar("file_name.vcf", skip = 28)
 #> [1] "Generating result file...DONE"
 ```
 
-The package also depends on two external packages ‘sqldf’ and
-‘data.table’, they need to be installed before using the package.
+The package also depends on two external packages `sqldf` and
+`data.table`, they need to be installed before using the package.
 
 ## Additional Resources
 
