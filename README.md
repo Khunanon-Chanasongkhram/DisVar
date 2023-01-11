@@ -24,7 +24,21 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(DisVar)
-## basic example code
+DisVar("file_name.vcf", skip = 28)
+#> Loading required package: sqldf
+#> Loading required package: gsubfn
+#> Loading required package: proto
+#> Loading required package: RSQLite
+#> Loading required package: data.table
+#> Warning: package 'data.table' was built under R version 4.2.2
+#> [1] "Reading files..."
+#> [1] "Reading files...DONE"
+#> [1] "Searching..."
+#> [1] "Searching...DONE"
+#> [1] "Processing results..."
+#> [1] "Processing results...DONE"
+#> [1] "Generating result file..."
+#> [1] "Generating result file...DONE"
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`?
