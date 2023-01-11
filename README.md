@@ -1,6 +1,3 @@
-DisVar: An R library for identifying variants associated with diseases
-using personal genetic information
-================
 Khunanon Chanasongkhram
 11/01/2023
 
@@ -32,9 +29,13 @@ devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 The main function in the package is ‘DisVar()’, which takes two
 arguments:
 
-• ‘file’: the name of the VCF file. • ‘skip’: the number of lines to
-skip at the beginning of the VCF file. (default: 0) The function returns
-a data frame containing variant information from various databases.
+• ‘file’: the name of the VCF file.
+
+• ‘skip’: the number of lines to skip at the beginning of the VCF file.
+(default: 0)
+
+The function returns a data frame containing variant information from
+various databases.
 
 Here’s an example of how to use the function:
 
@@ -59,3 +60,10 @@ DisVar("file_name.vcf", skip = 28)
 
 The package also depends on two external packages ‘sqldf’ and
 ‘data.table’, they need to be installed before using the package.
+
+## Additional Resources
+
+- The VCF format is a standard file format for storing genetic variation
+  data, and it is widely used in bioinformatics research. More
+  information on the VCF format can be found at the [VCF specification
+  page](http://samtools.github.io/hts-specs/VCFv4.3.pdf)
