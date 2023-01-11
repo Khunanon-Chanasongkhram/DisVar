@@ -1,26 +1,42 @@
+DisVar: An R library for identifying variants associated with diseases
+using personal genetic information
+================
+Khunanon Chanasongkhram
+11/01/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# DisVar
+# DisVar: An R library for identifying variants associated with diseases using personal genetic information
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of DisVar is to identify disease-associated variants.
+DisVar is an R package that finds diseases from a VCF file by comparing
+the variants in the VCF file with those in various databases. The
+package currently supports five databases: GWASdb, GRASP, GWAS Catalog,
+GAD, and, Johnson and O’Donnell.
 
 ## Installation
 
 You can install the development version of DisVar from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/) to install the package, you can use the
+`devtools` package and run the following command:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 ```
 
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
+The main function in the package is ‘DisVar()’, which takes two
+arguments:
+
+• ‘file’: the name of the VCF file. • ‘skip’: the number of lines to
+skip at the beginning of the VCF file. (default: 0) The function returns
+a data frame containing variant information from various databases.
+
+Here’s an example of how to use the function:
 
 ``` r
 library(DisVar)
@@ -41,29 +57,5 @@ DisVar("file_name.vcf", skip = 28)
 #> [1] "Generating result file...DONE"
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+The package also depends on two external packages ‘sqldf’ and
+‘data.table’, they need to be installed before using the package.
