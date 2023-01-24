@@ -1,5 +1,5 @@
 Khunanon Chanasongkhram
-11/01/2023
+24/01/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -37,6 +37,8 @@ arguments:
 The function returns a data frame containing variant information from
 various databases.
 
+### Examples
+
 Here’s an example of how to use the function:
 
 ``` r
@@ -60,6 +62,19 @@ DisVar("file_name.vcf", skip = 28)
 
 The package also depends on two external packages `sqldf` and
 `data.table`, they need to be installed before using the package.
+
+when you run this you will get this output file:
+`file_name.vcf_diseases_output.txt`
+
+| Disease                                                  | Chr | Position | Variant_id | Allele sample | Allele DB | Confident/P-value | DB           |
+|----------------------------------------------------------|-----|----------|------------|---------------|-----------|-------------------|--------------|
+| Breast cancer                                            | 3   | 4700592  | rs6762644  | A\>G          | A\>G      | 2.00E-12          | GWASdb       |
+|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 2.20E-12          | GRASP        |
+| Breast cancer (Estrogen receptor positive breast cancer) | 3   | 4700592  | rs6762644  | A\>G          | NA        | 1.40E-08          | GRASP        |
+| Breast cancer (invasive breast cancer)                   | 3   | 4700592  | rs6762644  | A\>G          | NA        | 1.20E-09          | GRASP        |
+|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 2.00E-12          | GWAS Catalog |
+|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 4.00E-18          | GWAS Catalog |
+| Breast_cancer                                            | 3   | 4700592  | rs6762644  | A\>G          | NA        | 9.00E-12          | GWAS Catalog |
 
 ## Additional Resources
 
