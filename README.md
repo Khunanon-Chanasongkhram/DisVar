@@ -11,7 +11,15 @@ Khunanon Chanasongkhram
 DisVar is an R package that finds diseases from a VCF file by comparing
 the variants in the VCF file with those in various databases. The
 package currently supports five databases: GWASdb, GRASP, GWAS Catalog,
-GAD, and, Johnson and O’Donnell.
+GAD, and Johnson and O’Donnell.
+
+## Features
+
+- Finds diseases from a VCF file by comparing the variants in the VCF
+  file with those in various databases.
+
+- Supports five databases: GWASdb, GRASP, GWAS Catalog, GAD, and Johnson
+  and O’Donnell.
 
 ## Installation
 
@@ -23,6 +31,13 @@ You can install the development version of DisVar from
 # install.packages("devtools")
 devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 ```
+
+## Dependencies
+
+The package depends on the following packages:
+
+- `sqldf`
+- `data.table`
 
 ## Usage
 
@@ -60,11 +75,10 @@ DisVar("file_name.vcf", skip = 28)
 #> [1] "Generating result file...DONE"
 ```
 
-The package also depends on two external packages `sqldf` and
-`data.table`, they need to be installed before using the package.
+You will get this output file: `file_name`\_diseases_output.txt
 
-when you run this you will get this output file:
-`file_name.vcf_diseases_output.txt`
+When you test the program with the test file (`file_name.vcf`), the
+results are shown in the following table.
 
 | Disease                                                  | Chr | Position | Variant_id | Allele sample | Allele DB | Confident/P-value | DB           |
 |----------------------------------------------------------|-----|----------|------------|---------------|-----------|-------------------|--------------|
@@ -82,3 +96,18 @@ when you run this you will get this output file:
   data, and it is widely used in bioinformatics research. More
   information on the VCF format can be found at the [VCF specification
   page](http://samtools.github.io/hts-specs/VCFv4.3.pdf)
+
+## Limitations and Known Issues
+
+- The package is limited to searching for variants in specific
+  databases, and may not include all known disease-associated variants.
+
+- The package uses external databases, which are subject to change and
+  may contain errors.
+
+- The package is still under development and may have bugs. If you
+  encounter any issues, please report them on the GitHub repository.
+
+- The package may take a long time to process large amounts of data.
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DisVar)](https://cran.r-project.org/package=DisVar)
