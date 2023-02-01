@@ -97,17 +97,4 @@ results are shown in the following table.
   information on the VCF format can be found at the [VCF specification
   page](http://samtools.github.io/hts-specs/VCFv4.3.pdf)
 
-## Limitations and Known Issues
-
-- The package is limited to searching for variants in specific
-  databases, and may not include all known disease-associated variants.
-
-- The package uses external databases, which are subject to change and
-  may contain errors.
-
-- The package is still under development and may have bugs. If you
-  encounter any issues, please report them on the GitHub repository.
-
-- The package may take a long time to process large amounts of data.
-
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DisVar)](https://cran.r-project.org/package=DisVar)
