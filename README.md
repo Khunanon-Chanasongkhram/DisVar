@@ -1,5 +1,5 @@
 Khunanon Chanasongkhram
-24/01/2023
+24/02/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -41,13 +41,10 @@ The package depends on the following packages:
 
 ## Usage
 
-The main function in the package is `DisVar()`, which takes two
+The main function in the package is `DisVar()`, which takes one
 arguments:
 
 - `file`: the name of the VCF file.
-
-- `skip`: the number of lines to skip at the beginning of the VCF file.
-  (default: 0)
 
 The function returns a data frame containing variant information from
 various databases.
@@ -58,14 +55,9 @@ Here’s an example of how to use the function:
 
 ``` r
 library(DisVar)
-DisVar("file_name.vcf", skip = 28)
-#> Loading required package: sqldf
-#> Loading required package: gsubfn
-#> Loading required package: proto
-#> Loading required package: RSQLite
-#> Loading required package: data.table
-#> Warning: package 'data.table' was built under R version 4.2.2
+DisVar("file_name.vcf")
 #> [1] "Reading files..."
+#> Taking input= as a system command ('grep -v '^#' file_name.vcf') and a variable has been used in the expression passed to `input=`. Please use fread(cmd=...). There is a security concern if you are creating an app, and the app could have a malicious user, and the app is not running in a secure environment; e.g. the app is running as root. Please read item 5 in the NEWS file for v1.11.6 for more information and for the option to suppress this message.
 #> [1] "Reading files...DONE"
 #> [1] "Searching..."
 #> [1] "Searching...DONE"

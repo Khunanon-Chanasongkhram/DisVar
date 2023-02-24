@@ -4,7 +4,7 @@
 \alias{DisVar}
 \title{Find diseases from the VCF file}
 \usage{
-DisVar(file = "vcf_file_name.vcf", skip = 0)
+DisVar(file = "vcf_file_name.vcf")
 }
 \arguments{
 \item{file}{the name of the VCF file.}
@@ -18,6 +18,6 @@ A data frame containing variant information from various databases
 This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 }
 \examples{
-DisVar("file_name.vcf", skip = 28)
+DisVar("file_name.vcf")
 
 }
