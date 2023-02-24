@@ -6,9 +6,9 @@
 #' @return A data frame containing variant information from various databases
 #' @export
 #'
-#' @examples DisVar("file_name.vcf", skip = 28)
+#' @examples DisVar("file_name.vcf")
 #'
-DisVar <- function(file = "vcf_file_name.vcf", skip = 0){
+DisVar <- function(file = "vcf_file_name.vcf"){
   if (!require("sqldf")) install.packages("sqldf")
   if (!require("data.table")) install.packages("data.table")
 
@@ -27,14 +27,18 @@ DisVar <- function(file = "vcf_file_name.vcf", skip = 0){
   data(GWAS_catalog_GRCh38)
   data(GAD_GRCh38)
   data(JnO_GRCh38)
-  variant_data <- fread(file = paste0(file), header=TRUE, stringsAsFactors=TRUE, skip=paste0(skip))
+  grep <- "grep -v '^#'"
+  #variant_data <- fread(file = paste0(file), select = 1:5, header=TRUE, stringsAsFactors=TRUE, skip=paste0(skip))
+  #variant_data <- fread(file = paste0(file), header=TRUE, stringsAsFactors=TRUE, skip=paste0(skip))
+  variant_data <- fread(paste(grep, file), select = 1:5, stringsAsFactors=TRUE)
 
-  col_list <- paste0("V", 1:ncol(variant_data))
+  col_list <- paste0("V", 1:5)
   colnames(variant_data) <- col_list
 
   chr <- c()
   allele_db_list <- c()
   allele_sample_list <- c()
+  variant_data$V1<-gsub("chr","",as.character(variant_data$V1))
   print("Reading files...DONE")
 
 
@@ -166,7 +170,7 @@ DisVar <- function(file = "vcf_file_name.vcf", skip = 0){
   }
 
   #create results in a table
-  align_df <- setNames(data.frame(matrix(ncol = 8, nrow = nrow(op_df))), c("Disease", "Chr", "Position", "Variant_id", "Allele sample", "Allele DB", "Confident/P-value", "DB"))
+  align_df <- setNames(data.frame(matrix(ncol = 8, nrow = nrow(op_df))), c("Disease", "Chr", "Position", "Variant_id", "Allele sample", "Allele DB", "Confident", "DB"))
 
 
   align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM op_df')
@@ -196,12 +200,14 @@ DisVar <- function(file = "vcf_file_name.vcf", skip = 0){
   }
   align_df["Allele sample"] <- allele_sample_list
 
-  align_df["Confident/P-value"] <- sqldf('SELECT P_value FROM op_df')
+  align_df["Confident"] <- sqldf('SELECT P_value FROM op_df')
   align_df["DB"] <- sqldf('SELECT DB FROM op_df')
 
-  aligned_df <- align_df[order(align_df$Disease),]
+  #aligned_df <- align_df[order(align_df$Disease),]
+  aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
+  colnames(aligned_df)[7] <- "Confident/P-value"
   print("Processing results...DONE")
   print("Generating result file...")
   write.table(aligned_df,file= paste0(file,"_diseases_output.txt"), quote = FALSE, sep = '\t', row.names = FALSE)

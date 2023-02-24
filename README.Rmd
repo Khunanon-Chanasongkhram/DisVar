@@ -1,6 +1,6 @@
 ---
 author: "Khunanon Chanasongkhram"
-date: "24/01/2023"
+date: "24/02/2023"
 output: github_document
 ---
 
@@ -43,11 +43,9 @@ The package depends on the following packages:
 
 ## Usage
 
-The main function in the package is `DisVar()`, which takes two arguments:
+The main function in the package is `DisVar()`, which takes one arguments:
 
 - `file`: the name of the VCF file.
-
-- `skip`: the number of lines to skip at the beginning of the VCF file. (default: 0)
 
 The function returns a data frame containing variant information from various databases.
 
@@ -57,7 +55,7 @@ Here's an example of how to use the function:
 
 ```{r example}
 library(DisVar)
-DisVar("file_name.vcf", skip = 28)
+DisVar("file_name.vcf")
 ```
 
 You will get this output file: `file_name`_diseases_output.txt
@@ -80,5 +78,3 @@ When you test the program with the test file (`file_name.vcf`), the results are 
 - The VCF format is a standard file format for storing genetic variation data, and it is widely used in bioinformatics research. More information on the VCF format can be found at the [VCF specification page](http://samtools.github.io/hts-specs/VCFv4.3.pdf)
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DisVar)](https://cran.r-project.org/package=DisVar)
-
-
