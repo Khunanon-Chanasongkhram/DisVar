@@ -8,8 +8,6 @@ DisVar(file = "vcf_file_name.vcf")
 }
 \arguments{
 \item{file}{the name of the VCF file.}
-
-\item{skip}{the number of lines to skip at the beginning of the VCF file. (default: 0)}
 }
 \value{
 A data frame containing variant information from various databases
