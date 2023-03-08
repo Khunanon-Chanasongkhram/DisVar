@@ -2,35 +2,38 @@
 #'
 #' This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 #' @param file the name of the VCF file.
-#' @param skip the number of lines to skip at the beginning of the VCF file. (default: 0)
 #' @return A data frame containing variant information from various databases
 #' @export
 #'
 #' @examples DisVar("file_name.vcf")
 #'
 DisVar <- function(file = "vcf_file_name.vcf"){
-  if (!require("sqldf")) install.packages("sqldf")
-  if (!require("data.table")) install.packages("data.table")
+  # Load required libraries
+  required_packages <- c("sqldf", "data.table", "dplyr")
+  for (package in required_packages) {
+    if (!require(package, character.only = TRUE)) {
+      install.packages(package)
+      suppressPackageStartupMessages(library(package, character.only = TRUE))
+    }
+  }
 
   # Validate inputs
   if (!file.exists(file)) {
     stop("File does not exist")
   }
-  if (!grepl(".vcf", file, ignore.case = TRUE)) {
+  if (!grepl(".vcf$", file, ignore.case = TRUE)) {
     stop("Input file must be a VCF file")
   }
 
   #Read files
-  print("Reading files...")
+  cat("\nReading files...\n")
   data(GWASdb_GRCh38)
   data(GRASP_GRCh38)
   data(GWAS_catalog_GRCh38)
   data(GAD_GRCh38)
   data(JnO_GRCh38)
   grep <- "grep -v '^#'"
-  #variant_data <- fread(file = paste0(file), select = 1:5, header=TRUE, stringsAsFactors=TRUE, skip=paste0(skip))
-  #variant_data <- fread(file = paste0(file), header=TRUE, stringsAsFactors=TRUE, skip=paste0(skip))
-  variant_data <- fread(paste(grep, file), select = 1:5, stringsAsFactors=TRUE)
+  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", select = 1:5, stringsAsFactors=TRUE, showProgress=TRUE))
 
   col_list <- paste0("V", 1:5)
   colnames(variant_data) <- col_list
@@ -39,11 +42,11 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   allele_db_list <- c()
   allele_sample_list <- c()
   variant_data$V1<-gsub("chr","",as.character(variant_data$V1))
-  print("Reading files...DONE")
+  cat("Reading files...DONE\n")
 
 
   #Search databases
-  print("Searching...")
+  cat("Searching...\n")
 
   #find variant that in the GWASdb database
   op_df_GWASdb <- sqldf("
@@ -159,9 +162,9 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
   op_df <- rbind(op_df_GWASdb,op_df_GRASP,op_df_GWAS_catalog,op_df_GAD,op_df_JnO)
 
-  print("Searching...DONE")
+  cat("Searching...DONE\n")
 
-  print("Processing results...")
+  cat("Processing results...\n")
   #If no variant is found, Exit programe
   if (nrow(op_df) == 0)
   {
@@ -208,8 +211,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   colnames(aligned_df)[7] <- "Confident/P-value"
-  print("Processing results...DONE")
-  print("Generating result file...")
-  write.table(aligned_df,file= paste0(file,"_diseases_output.txt"), quote = FALSE, sep = '\t', row.names = FALSE)
-  print("Generating result file...DONE")
+  cat("Processing results...DONE\n")
+  cat("Generating result file...\n")
+  output_file <- sub(".vcf", "_diseases_output.txt", file)
+  write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
+  cat("Generating result file...DONE\n")
+  cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
 }
