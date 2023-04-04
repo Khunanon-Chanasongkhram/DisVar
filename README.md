@@ -1,5 +1,5 @@
 Khunanon Chanasongkhram
-24/02/2023
+04/04/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -23,6 +23,8 @@ GAD, and Johnson and O’Donnell.
 
 ## Installation
 
+## Installing the Package in R Studio
+
 You can install the development version of DisVar from
 [GitHub](https://github.com/) to install the package, you can use the
 `devtools` package and run the following command:
@@ -31,6 +33,57 @@ You can install the development version of DisVar from
 # install.packages("devtools")
 devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 ```
+
+## Installing the Package on Linux servers
+
+### Step 1: Installing Minoconda 3
+
+To install Miniconda via the terminal, you can follow these steps:
+1.Create a directory to install Miniconda into:
+
+    mkdir -p ~/miniconda3
+
+2.Download the latest Python 3 based install script for Linux 64 bit:
+
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+
+3.Run the install script:
+
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+
+After then, you can restart your shell, and conda will be ready for use.
+For further details regarding conda installation please see [Miniconda
+linux
+installers](https://docs.conda.io/en/latest/miniconda.html#linux-installers)
+
+### Step 2: Installing R using conda
+
+Create a new conda environment for R by running the following command:
+
+    conda create -n r-environment r-base
+
+Please answer “y” for the question “Proceed (\[y\]/n)?”. This will
+create a new environment named ‘r-environment’ with R installed. Now you
+can activate the new environment by running:
+
+    conda activate r-environment
+
+and deactivate an active environment by running:
+
+    conda deactivate
+
+### Step 3: Installing the DisVar Package
+
+After activate r-environment via conda. Run R in Linux by following
+command:
+
+    R
+
+Then install the package
+
+    remotes::install_github(repo = "Khunanon-Chanasongkhram/DisVar",dependencies = TRUE,upgrade = TRUE)
+
+Now the DisVar is ready to use!
 
 ## Dependencies
 
@@ -56,15 +109,37 @@ Here’s an example of how to use the function:
 ``` r
 library(DisVar)
 DisVar("file_name.vcf")
-#> [1] "Reading files..."
-#> Taking input= as a system command ('grep -v '^#' file_name.vcf') and a variable has been used in the expression passed to `input=`. Please use fread(cmd=...). There is a security concern if you are creating an app, and the app could have a malicious user, and the app is not running in a secure environment; e.g. the app is running as root. Please read item 5 in the NEWS file for v1.11.6 for more information and for the option to suppress this message.
-#> [1] "Reading files...DONE"
-#> [1] "Searching..."
-#> [1] "Searching...DONE"
-#> [1] "Processing results..."
-#> [1] "Processing results...DONE"
-#> [1] "Generating result file..."
-#> [1] "Generating result file...DONE"
+#> Loading required package: sqldf
+#> Warning: package 'sqldf' was built under R version 4.2.2
+#> Loading required package: gsubfn
+#> Loading required package: proto
+#> Loading required package: RSQLite
+#> Loading required package: data.table
+#> Warning: package 'data.table' was built under R version 4.2.2
+#> data.table 1.14.8 using 6 threads (see ?getDTthreads).  Latest news: r-datatable.com
+#> Loading required package: dplyr
+#> Warning: package 'dplyr' was built under R version 4.2.2
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:data.table':
+#> 
+#>     between, first, last
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+#> 
+#> Reading files...
+#> Reading files...DONE
+#> Searching...
+#> Searching...DONE
+#> Processing results...
+#> Processing results...DONE
+#> Generating result file...
+#> Generating result file...DONE
+#> The output file is saved as: file_name_diseases_output.txt in the directory: C:/DisVar
 ```
 
 You will get this output file: `file_name`\_diseases_output.txt
