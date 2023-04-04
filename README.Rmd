@@ -1,6 +1,6 @@
 ---
 author: "Khunanon Chanasongkhram"
-date: "24/02/2023"
+date: "04/04/2023"
 output: github_document
 ---
 
@@ -29,12 +29,66 @@ DisVar is an R package that finds diseases from a VCF file by comparing the vari
 
 ## Installation
 
+## Installing the Package in R Studio
 You can install the development version of DisVar from [GitHub](https://github.com/) to install the package, you can use the `devtools` package and run the following command:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("Khunanon-Chanasongkhram/DisVar")
 ```
+
+## Installing the Package on Linux servers
+### Step 1: Installing Minoconda 3
+To install Miniconda via the terminal, you can follow these steps:
+1.Create a directory to install Miniconda into:
+``` 
+mkdir -p ~/miniconda3
+```
+
+2.Download the latest Python 3 based install script for Linux 64 bit:
+``` 
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+```
+
+3.Run the install script:
+``` 
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+```
+
+After then, you can restart your shell, and conda will be ready for use.
+For further details regarding conda installation please see [Miniconda linux installers](https://docs.conda.io/en/latest/miniconda.html#linux-installers)
+
+### Step 2: Installing R using conda
+Create a new conda environment for R by running the following command:
+``` 
+conda create -n r-environment r-base
+```
+
+Please answer "y" for the question "Proceed ([y]/n)?".
+This will create a new environment named 'r-environment' with R installed.
+Now you can activate the new environment by running:
+```
+conda activate r-environment
+```
+
+and deactivate an active environment by running:
+
+```
+conda deactivate
+```
+
+### Step 3: Installing the DisVar Package
+After activate r-environment via conda. Run R in Linux by following command:
+```
+R
+```
+
+Then install the package
+```
+remotes::install_github(repo = "Khunanon-Chanasongkhram/DisVar",dependencies = TRUE,upgrade = TRUE)
+```
+Now the DisVar is ready to use!
+
 ## Dependencies
 The package depends on the following packages:
 
