@@ -26,7 +26,7 @@ GAD, and Johnson and O’Donnell.
 ## Installing the Package in R Studio
 
 You can install the development version of DisVar from
-[GitHub](https://github.com/) to install the package, you can use the
+[GitHub](https://github.com/). To install the package, you can use the
 `devtools` package and run the following command:
 
 ``` r
@@ -43,7 +43,7 @@ To install Miniconda via the terminal, you can follow these steps:
 
     mkdir -p ~/miniconda3
 
-2.Download the latest Python 3 based install script for Linux 64 bit:
+2.Download the latest Miniconda3 based install script for Linux 64 bit:
 
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
 
@@ -68,10 +68,10 @@ can activate the new environment by running:
 
     conda activate r-environment
 
-and deactivate an active environment by running:
+(If you want to and deactivate an active environment just running:
 
     conda deactivate
-
+)
 ### Step 3: Installing the DisVar Package
 
 After activate r-environment via conda. Run R in Linux by following
@@ -99,7 +99,7 @@ arguments:
 
 - `file`: the name of the VCF file.
 
-The function returns a data frame containing variant information from
+The function returns a data frame containing variants associated with diseases compared from
 various databases.
 
 ### Examples
