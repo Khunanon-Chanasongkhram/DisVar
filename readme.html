@@ -601,7 +601,7 @@ padding-top: 0px;
 
 <body>
 
-<p>Khunanon Chanasongkhram 24/02/2023</p>
+<p>Khunanon Chanasongkhram 04/04/2023</p>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <h1 id="disvar-an-r-library-for-identifying-variants-associated-with-diseases-using-personal-genetic-information">DisVar:
@@ -623,10 +623,46 @@ VCF file with those in various databases.</p></li>
 Johnson and O’Donnell.</p></li>
 </ul>
 <h2 id="installation">Installation</h2>
+<h2 id="installing-the-package-in-r-studio">Installing the Package in R
+Studio</h2>
 <p>You can install the development version of DisVar from <a href="https://github.com/">GitHub</a> to install the package, you can
 use the <code>devtools</code> package and run the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Khunanon-Chanasongkhram/DisVar&quot;</span>)</span></code></pre></div>
+<h2 id="installing-the-package-on-linux-servers">Installing the Package
+on Linux servers</h2>
+<h3 id="step-1-installing-minoconda-3">Step 1: Installing Minoconda
+3</h3>
+<p>To install Miniconda via the terminal, you can follow these steps:
+1.Create a directory to install Miniconda into:</p>
+<pre><code>mkdir -p ~/miniconda3</code></pre>
+<p>2.Download the latest Python 3 based install script for Linux 64
+bit:</p>
+<pre><code>wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</code></pre>
+<p>3.Run the install script:</p>
+<pre><code>bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</code></pre>
+<p>After then, you can restart your shell, and conda will be ready for
+use. For further details regarding conda installation please see <a href="https://docs.conda.io/en/latest/miniconda.html#linux-installers">Miniconda
+linux installers</a></p>
+<h3 id="step-2-installing-r-using-conda">Step 2: Installing R using
+conda</h3>
+<p>Create a new conda environment for R by running the following
+command:</p>
+<pre><code>conda create -n r-environment r-base</code></pre>
+<p>Please answer “y” for the question “Proceed ([y]/n)?”. This will
+create a new environment named ‘r-environment’ with R installed. Now you
+can activate the new environment by running:</p>
+<pre><code>conda activate r-environment</code></pre>
+<p>and deactivate an active environment by running:</p>
+<pre><code>conda deactivate</code></pre>
+<h3 id="step-3-installing-the-disvar-package">Step 3: Installing the
+DisVar Package</h3>
+<p>After activate r-environment via conda. Run R in Linux by following
+command:</p>
+<pre><code>R</code></pre>
+<p>Then install the package</p>
+<pre><code>remotes::install_github(repo = &quot;Khunanon-Chanasongkhram/DisVar&quot;,dependencies = TRUE,upgrade = TRUE)</code></pre>
+<p>Now the DisVar is ready to use!</p>
 <h2 id="dependencies">Dependencies</h2>
 <p>The package depends on the following packages:</p>
 <ul>
@@ -643,17 +679,39 @@ takes one arguments:</p>
 various databases.</p>
 <h3 id="examples">Examples</h3>
 <p>Here’s an example of how to use the function:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DisVar)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DisVar</span>(<span class="st">&quot;file_name.vcf&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Reading files...&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Taking input= as a system command (&#39;grep -v &#39;^#&#39; file_name.vcf&#39;) and a variable has been used in the expression passed to `input=`. Please use fread(cmd=...). There is a security concern if you are creating an app, and the app could have a malicious user, and the app is not running in a secure environment; e.g. the app is running as root. Please read item 5 in the NEWS file for v1.11.6 for more information and for the option to suppress this message.</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Reading files...DONE&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Searching...&quot;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Searching...DONE&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Processing results...&quot;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Processing results...DONE&quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Generating result file...&quot;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Generating result file...DONE&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DisVar)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DisVar</span>(<span class="st">&quot;file_name.vcf&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: sqldf</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;sqldf&#39; was built under R version 4.2.2</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: gsubfn</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: proto</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: RSQLite</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: data.table</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;data.table&#39; was built under R version 4.2.2</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data.table 1.14.8 using 6 threads (see ?getDTthreads).  Latest news: r-datatable.com</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: dplyr</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;dplyr&#39; was built under R version 4.2.2</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:data.table&#39;:</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     between, first, last</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Reading files...</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Reading files...DONE</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching...</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching...DONE</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Processing results...</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Processing results...DONE</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Generating result file...</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Generating result file...DONE</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The output file is saved as: file_name_diseases_output.txt in the directory: C:/DisVar</span></span></code></pre></div>
 <p>You will get this output file:
 <code>file_name</code>_diseases_output.txt</p>
 <p>When you test the program with the test file
