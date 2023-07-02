@@ -116,6 +116,11 @@ You will get this output file: `file_name`_diseases_output.txt
 
 When you test the program with the test file (`file_name.vcf`), the results are shown in the following table.
 
+```{r example}
+library(knitr)
+kable(head(aligned_df))
+```
+
 | Disease                                                    | Chr | Position | Variant_id | Allele sample | Allele DB | Confident/P-value | DB           |
 |------------------------------------------------------------|-----|----------|------------|---------------|-----------|-------------------|--------------|
 | Breast cancer                                              |   3 |  4700592 | rs6762644  | A>G           | A>G       |          2.00E-12 | GWASdb       |

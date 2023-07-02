@@ -26,7 +26,7 @@ GAD, and Johnson and O’Donnell.
 ## Installing the Package in R Studio
 
 You can install the development version of DisVar from
-[GitHub](https://github.com/). To install the package, you can use the
+[GitHub](https://github.com/) to install the package, you can use the
 `devtools` package and run the following command:
 
 ``` r
@@ -43,7 +43,7 @@ To install Miniconda via the terminal, you can follow these steps:
 
     mkdir -p ~/miniconda3
 
-2.Download the latest Miniconda3 based install script for Linux 64 bit:
+2.Download the latest Python 3 based install script for Linux 64 bit:
 
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
 
@@ -68,10 +68,10 @@ can activate the new environment by running:
 
     conda activate r-environment
 
-(If you want to and deactivate an active environment just running:
+and deactivate an active environment by running:
 
     conda deactivate
-)
+
 ### Step 3: Installing the DisVar Package
 
 After activate r-environment via conda. Run R in Linux by following
@@ -99,7 +99,7 @@ arguments:
 
 - `file`: the name of the VCF file.
 
-The function returns a data frame containing variants associated with diseases compared from
+The function returns a data frame containing variant information from
 various databases.
 
 ### Examples
@@ -110,15 +110,14 @@ Here’s an example of how to use the function:
 library(DisVar)
 DisVar("file_name.vcf")
 #> Loading required package: sqldf
-#> Warning: package 'sqldf' was built under R version 4.2.2
+#> Warning: package 'sqldf' was built under R version 4.3.1
 #> Loading required package: gsubfn
+#> Warning: package 'gsubfn' was built under R version 4.3.1
 #> Loading required package: proto
+#> Warning: package 'proto' was built under R version 4.3.1
 #> Loading required package: RSQLite
 #> Loading required package: data.table
-#> Warning: package 'data.table' was built under R version 4.2.2
-#> data.table 1.14.8 using 6 threads (see ?getDTthreads).  Latest news: r-datatable.com
 #> Loading required package: dplyr
-#> Warning: package 'dplyr' was built under R version 4.2.2
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:data.table':
@@ -147,15 +146,15 @@ You will get this output file: `file_name`\_diseases_output.txt
 When you test the program with the test file (`file_name.vcf`), the
 results are shown in the following table.
 
-| Disease                                                  | Chr | Position | Variant_id | Allele sample | Allele DB | Confident/P-value | DB           |
-|----------------------------------------------------------|-----|----------|------------|---------------|-----------|-------------------|--------------|
-| Breast cancer                                            | 3   | 4700592  | rs6762644  | A\>G          | A\>G      | 2.00E-12          | GWASdb       |
-|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 2.20E-12          | GRASP        |
-| Breast cancer (Estrogen receptor positive breast cancer) | 3   | 4700592  | rs6762644  | A\>G          | NA        | 1.40E-08          | GRASP        |
-| Breast cancer (invasive breast cancer)                   | 3   | 4700592  | rs6762644  | A\>G          | NA        | 1.20E-09          | GRASP        |
-|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 2.00E-12          | GWAS Catalog |
-|                                                          | 3   | 4700592  | rs6762644  | A\>G          | NA        | 4.00E-18          | GWAS Catalog |
-| Breast_cancer                                            | 3   | 4700592  | rs6762644  | A\>G          | NA        | 9.00E-12          | GWAS Catalog |
+| Disease                                                  | Chr | Position | Gene       | Variant_id | Variant_type | Confident/P-value | Allele DB | Confident | DB           |
+|----------------------------------------------------------|-----|----------|------------|------------|--------------|-------------------|-----------|-----------|--------------|
+| Breast cancer                                            | 3   | 4700592  | ITPR1      | rs6762644  | intron       | A\>G              | A\>G      | 2e-12     | GWASdb       |
+|                                                          | 3   | 4700592  | NA         | rs6762644  | NA           | A\>G              | NA        | 2.2e-12   | GRASP        |
+| Breast cancer (Estrogen receptor positive breast cancer) | 3   | 4700592  | NA         | rs6762644  | NA           | A\>G              | NA        | 1.4e-08   | GRASP        |
+| Breast cancer (invasive breast cancer)                   | 3   | 4700592  | NA         | rs6762644  | NA           | A\>G              | NA        | 1.2e-09   | GRASP        |
+| Breast_cancer                                            | 3   | 4700592  | EGOT/ITPR1 | rs6762644  | intron       | A\>G              | NA        | 4e-18     | GWAS Catalog |
+|                                                          | 3   | 4700592  | ITPR1,EGOT | rs6762644  | intron       | A\>G              | NA        | 2e-12     | GWAS Catalog |
+|                                                          | 3   | 4700592  | NR         | rs6762644  | intron       | A\>G              | NA        | 9e-12     | GWAS Catalog |
 
 ## Additional Resources
 
