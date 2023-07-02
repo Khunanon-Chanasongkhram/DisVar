@@ -1,0 +1,8 @@
+Disease	Chr	Position	Gene	Variant_id	Variant_type	Confident/P-value	Allele DB	Confident	DB
+Breast cancer	3	4700592	ITPR1	rs6762644	intron	A>G	A>G	2e-12	GWASdb
+	3	4700592	NA	rs6762644	NA	A>G	NA	2.2e-12	GRASP
+Breast cancer (Estrogen receptor positive breast cancer)	3	4700592	NA	rs6762644	NA	A>G	NA	1.4e-08	GRASP
+Breast cancer (invasive breast cancer)	3	4700592	NA	rs6762644	NA	A>G	NA	1.2e-09	GRASP
+Breast_cancer	3	4700592	EGOT/ITPR1	rs6762644	intron	A>G	NA	4e-18	GWAS Catalog
+	3	4700592	ITPR1,EGOT	rs6762644	intron	A>G	NA	2e-12	GWAS Catalog
+	3	4700592	NR	rs6762644	intron	A>G	NA	9e-12	GWAS Catalog
