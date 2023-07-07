@@ -33,9 +33,9 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   data(GAD_GRCh38)
   data(JnO_GRCh38)
   grep <- "grep -v '^#'"
-  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", select = 1:5, stringsAsFactors=TRUE, showProgress=TRUE))
+  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", select = 1:8, stringsAsFactors=TRUE, showProgress=TRUE))
 
-  col_list <- paste0("V", 1:5)
+  col_list <- paste0("V", 1:8)
   colnames(variant_data) <- col_list
 
   chr <- c()
@@ -61,7 +61,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
                         GWASdb_GRCh38.P_value,
                         GWASdb_GRCh38.Gwas_trait,
                         GWASdb_GRCh38.Gene,
-                        GWASdb_GRCh38.Variant_type
+                        GWASdb_GRCh38.Variant_type,
+                        variant_data.V6,
+                        variant_data.V7,
+                        variant_data.V8
                         FROM GWASdb_GRCh38, variant_data
                         WHERE variant_data.V2 = GWASdb_GRCh38.Position AND variant_data.V1 = GWASdb_GRCh38.Chr AND GWASdb_GRCh38.P_value < 0.0000001
                         ")
@@ -84,7 +87,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
                         GRASP_GRCh38.P_value,
                         GRASP_GRCh38.Gwas_trait,
                         GRASP_GRCh38.Gene,
-                        GRASP_GRCh38.Variant_type
+                        GRASP_GRCh38.Variant_type,
+                        variant_data.V6,
+                        variant_data.V7,
+                        variant_data.V8
                         FROM GRASP_GRCh38, variant_data
                         WHERE variant_data.V2 = GRASP_GRCh38.Position AND variant_data.V1 = GRASP_GRCh38.Chr AND GRASP_GRCh38.P_value < 0.0000001
                        ")
@@ -106,7 +112,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
                         GWAS_catalog_GRCh38.P_value,
                         GWAS_catalog_GRCh38.Gwas_trait,
                         GWAS_catalog_GRCh38.Gene,
-                        GWAS_catalog_GRCh38.Variant_type
+                        GWAS_catalog_GRCh38.Variant_type,
+                        variant_data.V6,
+                        variant_data.V7,
+                        variant_data.V8
                         FROM GWAS_catalog_GRCh38, variant_data
                         WHERE variant_data.V2 = GWAS_catalog_GRCh38.Position AND variant_data.V1 = GWAS_catalog_GRCh38.Chr AND GWAS_catalog_GRCh38.P_value < 0.0000001
                         ")
@@ -129,7 +138,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
                       GAD_GRCh38.P_value,
                       GAD_GRCh38.Gwas_trait,
                       GAD_GRCh38.Gene,
-                      GAD_GRCh38.Variant_type
+                      GAD_GRCh38.Variant_type,
+                      variant_data.V6,
+                      variant_data.V7,
+                      variant_data.V8
                       FROM GAD_GRCh38, variant_data
                       WHERE variant_data.V2 = GAD_GRCh38.Position AND variant_data.V1 = GAD_GRCh38.Chr")
 
@@ -151,7 +163,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
                       JnO_GRCh38.P_value,
                       JnO_GRCh38.Gwas_trait,
                       JnO_GRCh38.Gene,
-                      JnO_GRCh38.Variant_type
+                      JnO_GRCh38.Variant_type,
+                      variant_data.V6,
+                      variant_data.V7,
+                      variant_data.V8
                       FROM JnO_GRCh38, variant_data
                       WHERE variant_data.V2 = JnO_GRCh38.Position AND variant_data.V1 = JnO_GRCh38.Chr AND JnO_GRCh38.P_value < 0.0000001
                         ")
@@ -165,7 +180,7 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   cat("Searching...DONE\n")
 
   cat("Processing results...\n")
-  #If no variant is found, Exit programe
+  #If no variant is found, Exit program
   if (nrow(op_df) == 0)
   {
     stop(paste('No variant was found in the database'))
@@ -173,15 +188,14 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #create results in a table
-  align_df <- setNames(data.frame(matrix(ncol = 10, nrow = nrow(op_df))), c("Disease", "Chr", "Position", "Gene", "Variant_id", "Variant_type", "Allele sample", "Allele DB", "Confident", "DB"))
-
+  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(op_df))), c("Disease", "Chrom", "Position", "Gene", "Variant ID", "Variant Type", "Allele Sample", "Allele DB", "Confident", "DB", "Qual", "Filter", "Info"))
 
   align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM op_df')
-  align_df["Chr"] <- sqldf('SELECT Chr FROM op_df')
+  align_df["Chrom"] <- sqldf('SELECT Chr FROM op_df')
   align_df["Position"] <- sqldf('SELECT Position FROM op_df')
   align_df["Gene"] <- sqldf('SELECT Gene FROM op_df')
-  align_df["Variant_id"] <- sqldf('SELECT Rsid FROM op_df')
-  align_df["Variant_type"] <- sqldf('SELECT Variant_type FROM op_df')
+  align_df["Variant ID"] <- sqldf('SELECT Rsid FROM op_df')
+  align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM op_df')
 
   for (i in 1:nrow(op_df))
   {
@@ -203,16 +217,19 @@ DisVar <- function(file = "vcf_file_name.vcf"){
     allele_sample = paste(ref_sample, alt_sample, sep = ">")
     allele_sample_list <- append(allele_sample_list,allele_sample)
   }
-  align_df["Allele sample"] <- allele_sample_list
+  align_df["Allele Sample"] <- allele_sample_list
 
   align_df["Confident"] <- sqldf('SELECT P_value FROM op_df')
   align_df["DB"] <- sqldf('SELECT DB FROM op_df')
+  align_df["Qual"] <- sqldf('SELECT V6 FROM op_df')
+  align_df["Filter"] <- sqldf('SELECT V7 FROM op_df')
+  align_df["Info"] <- sqldf('SELECT V8 FROM op_df')
 
   #aligned_df <- align_df[order(align_df$Disease),]
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
-  colnames(aligned_df)[9] <- "Confident/P-value"
+  colnames(aligned_df)[9] <- "P-value"
   cat("Processing results...DONE\n")
   cat("Generating result file...\n")
   output_file <- sub(".vcf", "_diseases_output.txt", file)
