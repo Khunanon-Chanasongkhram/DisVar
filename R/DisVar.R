@@ -212,7 +212,7 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
-  colnames(aligned_df)[7] <- "Confident/P-value"
+  colnames(aligned_df)[9] <- "Confident/P-value"
   cat("Processing results...DONE\n")
   cat("Generating result file...\n")
   output_file <- sub(".vcf", "_diseases_output.txt", file)
