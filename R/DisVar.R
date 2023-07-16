@@ -3,6 +3,9 @@
 #' This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 #' @param file the name of the VCF file.
 #' @return A data frame containing variant information from various databases
+#' @importFrom data.table fread setDT
+#' @import sqldf
+#' @import dplyr
 #' @export
 #'
 #' @examples DisVar("file_name.vcf")
@@ -45,10 +48,11 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   #Search databases
   cat("Searching...\n")
 
+
   #find variant that in the GWASdb database
 
-  op_df_GWASdb <- data.table::setDT(GWASdb_GRCh38)[data.table::setDT(variant_data),
-                  on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+  op_df_GWASdb <- setDT(GWASdb_GRCh38)[setDT(variant_data),
+                  on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
                   .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_GWASdb) > 0)
@@ -57,8 +61,8 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the GRASP database
-  op_df_GRASP <- data.table::setDT(GRASP_GRCh38)[data.table::setDT(variant_data),
-                 on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+  op_df_GRASP <- setDT(GRASP_GRCh38)[setDT(variant_data),
+                 on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
                  .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_GRASP) > 0)
@@ -67,8 +71,8 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the GWAS catalog database
-  op_df_GWAS_catalog <- data.table::setDT(GWAS_catalog_GRCh38)[data.table::setDT(variant_data),
-                        on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+  op_df_GWAS_catalog <- setDT(GWAS_catalog_GRCh38)[setDT(variant_data),
+                        on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
                         .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_GWAS_catalog) > 0)
@@ -78,8 +82,8 @@ DisVar <- function(file = "vcf_file_name.vcf"){
 
   #find variant that in the GAD database
   GAD_GRCh38$P_value <- 0
-  op_df_GAD <- data.table::setDT(GAD_GRCh38)[data.table::setDT(variant_data),
-               on = .(Position = V2, Chr = V1)][(P_value < 0.0000001), .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
+  op_df_GAD <- setDT(GAD_GRCh38)[setDT(variant_data),
+               on = .(Position = V2, Chr = V1)][P_value < 0.0000001, .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
   op_df_GAD$P_value <- NA
 
   if (nrow(op_df_GAD) > 0)
@@ -88,8 +92,8 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the Johnson and O'Donnell database
-  op_df_JnO <- data.table::setDT(JnO_GRCh38)[data.table::setDT(variant_data),
-                        on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+  op_df_JnO <- setDT(JnO_GRCh38)[setDT(variant_data),
+                        on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
                         .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_JnO) > 0)
