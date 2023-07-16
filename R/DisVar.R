@@ -33,41 +33,23 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   data(GAD_GRCh38)
   data(JnO_GRCh38)
   grep <- "grep -v '^#'"
-  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", select = 1:8, stringsAsFactors=TRUE, showProgress=TRUE))
-
-  col_list <- paste0("V", 1:8)
-  colnames(variant_data) <- col_list
+  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE))
 
   chr <- c()
   allele_db_list <- c()
   allele_sample_list <- c()
   variant_data$V1<-gsub("chr","",as.character(variant_data$V1))
+  variant_data$V2 <- as.integer(variant_data$V2)
   cat("Reading files...DONE\n")
-
 
   #Search databases
   cat("Searching...\n")
 
   #find variant that in the GWASdb database
-  op_df_GWASdb <- sqldf("
-                        SELECT
-                        GWASdb_GRCh38.Rsid,
-                        GWASdb_GRCh38.Chr,
-                        GWASdb_GRCh38.Position,
-                        variant_data.V4,
-                        variant_data.V5,
-                        GWASdb_GRCh38.Ref,
-                        GWASdb_GRCh38.Alt,
-                        GWASdb_GRCh38.P_value,
-                        GWASdb_GRCh38.Gwas_trait,
-                        GWASdb_GRCh38.Gene,
-                        GWASdb_GRCh38.Variant_type,
-                        variant_data.V6,
-                        variant_data.V7,
-                        variant_data.V8
-                        FROM GWASdb_GRCh38, variant_data
-                        WHERE variant_data.V2 = GWASdb_GRCh38.Position AND variant_data.V1 = GWASdb_GRCh38.Chr AND GWASdb_GRCh38.P_value < 0.0000001
-                        ")
+
+  op_df_GWASdb <- data.table::setDT(GWASdb_GRCh38)[data.table::setDT(variant_data),
+                  on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+                  .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_GWASdb) > 0)
   {
@@ -75,50 +57,19 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the GRASP database
-  op_df_GRASP <- sqldf("
-                        SELECT
-                        GRASP_GRCh38.Rsid,
-                        GRASP_GRCh38.Chr,
-                        GRASP_GRCh38.Position,
-                        variant_data.V4,
-                        variant_data.V5,
-                        GRASP_GRCh38.Ref,
-                        GRASP_GRCh38.Alt,
-                        GRASP_GRCh38.P_value,
-                        GRASP_GRCh38.Gwas_trait,
-                        GRASP_GRCh38.Gene,
-                        GRASP_GRCh38.Variant_type,
-                        variant_data.V6,
-                        variant_data.V7,
-                        variant_data.V8
-                        FROM GRASP_GRCh38, variant_data
-                        WHERE variant_data.V2 = GRASP_GRCh38.Position AND variant_data.V1 = GRASP_GRCh38.Chr AND GRASP_GRCh38.P_value < 0.0000001
-                       ")
+  op_df_GRASP <- data.table::setDT(GRASP_GRCh38)[data.table::setDT(variant_data),
+                 on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+                 .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+
   if (nrow(op_df_GRASP) > 0)
   {
     op_df_GRASP$DB <- "GRASP"
   }
 
   #find variant that in the GWAS catalog database
-  op_df_GWAS_catalog <- sqldf("
-                        SELECT
-                        GWAS_catalog_GRCh38.Rsid,
-                        GWAS_catalog_GRCh38.Chr,
-                        GWAS_catalog_GRCh38.Position,
-                        variant_data.V4,
-                        variant_data.V5,
-                        GWAS_catalog_GRCh38.Ref,
-                        GWAS_catalog_GRCh38.Alt,
-                        GWAS_catalog_GRCh38.P_value,
-                        GWAS_catalog_GRCh38.Gwas_trait,
-                        GWAS_catalog_GRCh38.Gene,
-                        GWAS_catalog_GRCh38.Variant_type,
-                        variant_data.V6,
-                        variant_data.V7,
-                        variant_data.V8
-                        FROM GWAS_catalog_GRCh38, variant_data
-                        WHERE variant_data.V2 = GWAS_catalog_GRCh38.Position AND variant_data.V1 = GWAS_catalog_GRCh38.Chr AND GWAS_catalog_GRCh38.P_value < 0.0000001
-                        ")
+  op_df_GWAS_catalog <- data.table::setDT(GWAS_catalog_GRCh38)[data.table::setDT(variant_data),
+                        on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+                        .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_GWAS_catalog) > 0)
   {
@@ -126,24 +77,10 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the GAD database
-  op_df_GAD <- sqldf("
-                      SELECT
-                      GAD_GRCh38.Rsid,
-                      GAD_GRCh38.Chr,
-                      GAD_GRCh38.Position,
-                      variant_data.V4,
-                      variant_data.V5,
-                      GAD_GRCh38.Ref,
-                      GAD_GRCh38.Alt,
-                      GAD_GRCh38.P_value,
-                      GAD_GRCh38.Gwas_trait,
-                      GAD_GRCh38.Gene,
-                      GAD_GRCh38.Variant_type,
-                      variant_data.V6,
-                      variant_data.V7,
-                      variant_data.V8
-                      FROM GAD_GRCh38, variant_data
-                      WHERE variant_data.V2 = GAD_GRCh38.Position AND variant_data.V1 = GAD_GRCh38.Chr")
+  GAD_GRCh38$P_value <- 0
+  op_df_GAD <- data.table::setDT(GAD_GRCh38)[data.table::setDT(variant_data),
+               on = .(Position = V2, Chr = V1)][(P_value < 0.0000001), .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
+  op_df_GAD$P_value <- NA
 
   if (nrow(op_df_GAD) > 0)
   {
@@ -151,31 +88,15 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   }
 
   #find variant that in the Johnson and O'Donnell database
-  op_df_JnO <- sqldf("
-                      SELECT
-                      JnO_GRCh38.Rsid,
-                      JnO_GRCh38.Chr,
-                      JnO_GRCh38.Position,
-                      variant_data.V4,
-                      variant_data.V5,
-                      JnO_GRCh38.Ref,
-                      JnO_GRCh38.Alt,
-                      JnO_GRCh38.P_value,
-                      JnO_GRCh38.Gwas_trait,
-                      JnO_GRCh38.Gene,
-                      JnO_GRCh38.Variant_type,
-                      variant_data.V6,
-                      variant_data.V7,
-                      variant_data.V8
-                      FROM JnO_GRCh38, variant_data
-                      WHERE variant_data.V2 = JnO_GRCh38.Position AND variant_data.V1 = JnO_GRCh38.Chr AND JnO_GRCh38.P_value < 0.0000001
-                        ")
+  op_df_JnO <- data.table::setDT(JnO_GRCh38)[data.table::setDT(variant_data),
+                        on = .(Position = V2, Chr = V1)][(P_value < 0.0000001),
+                        .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_JnO) > 0)
   {
     op_df_JnO$DB <- "Johnson and O'Donnell"
   }
-  op_df <- rbind(op_df_GWASdb,op_df_GRASP,op_df_GWAS_catalog,op_df_GAD,op_df_JnO)
+  op_df <- rbind(op_df_GWASdb,op_df_GRASP,op_df_GWAS_catalog,op_df_GAD,op_df_JnO, fill=TRUE)
 
   cat("Searching...DONE\n")
 
@@ -197,6 +118,8 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   align_df["Variant ID"] <- sqldf('SELECT Rsid FROM op_df')
   align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM op_df')
 
+  op_df$Ref <- as.character(op_df$Ref)
+  op_df$Alt <- as.character(op_df$Alt)
   for (i in 1:nrow(op_df))
   {
     ref_db <- op_df[i,6]
@@ -225,14 +148,13 @@ DisVar <- function(file = "vcf_file_name.vcf"){
   align_df["Filter"] <- sqldf('SELECT V7 FROM op_df')
   align_df["Info"] <- sqldf('SELECT V8 FROM op_df')
 
-  #aligned_df <- align_df[order(align_df$Disease),]
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   colnames(aligned_df)[9] <- "P-value"
   cat("Processing results...DONE\n")
   cat("Generating result file...\n")
-  output_file <- sub(".vcf", "_diseases_output.txt", file)
+  output_file <- sub(".vcf", "_DisVar.txt", file)
   write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
   cat("Generating result file...DONE\n")
   cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
