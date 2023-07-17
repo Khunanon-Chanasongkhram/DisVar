@@ -92,6 +92,7 @@ The package depends on the following packages:
 
 - `sqldf`
 - `data.table`
+- `dplyr`
 
 ## Usage
 
@@ -118,6 +119,7 @@ DisVar("file_name.vcf")
 #> Warning: package 'proto' was built under R version 4.3.1
 #> Loading required package: RSQLite
 #> Loading required package: data.table
+#> Warning: package 'data.table' was built under R version 4.3.1
 #> Loading required package: dplyr
 #> 
 #> Attaching package: 'dplyr'
@@ -139,7 +141,7 @@ DisVar("file_name.vcf")
 #> Processing results...DONE
 #> Generating result file...
 #> Generating result file...DONE
-#> The output file is saved as: file_name_diseases_output.txt in the directory: C:/DisVar
+#> The output file is saved as: file_name_DisVar.txt in the directory: C:/DisVar
 ```
 
 You will get this output file: `file_name`\_diseases_output.txt
