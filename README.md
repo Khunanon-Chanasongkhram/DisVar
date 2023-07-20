@@ -23,7 +23,7 @@ GAD, and Johnson and O’Donnell.
 
 ## Installation
 
-## Installing the Package in R Studio
+## Installing the Package in R Studio (Windows)
 
 You can install the development version of DisVar from
 [GitHub](https://github.com/). To install the package, you can use the
