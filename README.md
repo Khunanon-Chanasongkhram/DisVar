@@ -1,5 +1,5 @@
 Khunanon Chanasongkhram
-07/07/2023
+22/07/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -23,7 +23,7 @@ GAD, and Johnson and O’Donnell.
 
 ## Installation
 
-## Installing the Package in R Studio (Windows)
+## Installing the Package in R Studio
 
 You can install the development version of DisVar from
 [GitHub](https://github.com/). To install the package, you can use the
