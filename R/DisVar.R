@@ -3,14 +3,16 @@
 #' This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 #' @param file the name of the VCF file.
 #' @return A data frame containing variant information from various databases
-#' @importFrom data.table fread setDT
+#' @importFrom data.table between first last
 #' @import sqldf
-#' @import dplyr
+#' @importFrom dplyr between first last
 #' @export
 #'
 #' @examples DisVar("file_name.vcf")
 #'
-DisVar <- function(file = "vcf_file_name.vcf"){
+
+
+DisVar <- function(file = "file_name.vcf"){
   # Load required libraries
   required_packages <- c("sqldf", "data.table", "dplyr")
   for (package in required_packages) {
