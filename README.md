@@ -150,7 +150,7 @@ DisVar("file_name.vcf")
 #> The output file is saved as: file_name_DisVar.txt in the directory: C:/DisVar
 ```
 
-You will get this output file: `file_name`\_diseases_output.txt
+You will get this output file: `file_name`\_DisVar.txt
 
 When you test the program with the test file (`file_name.vcf`), the
 results are shown in the following table.
