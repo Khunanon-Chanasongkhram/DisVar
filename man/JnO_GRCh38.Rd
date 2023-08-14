@@ -3,12 +3,13 @@
 \docType{data}
 \name{JnO_GRCh38}
 \alias{JnO_GRCh38}
+\alias{JnO_GRCh38_man}
 \title{JnO_GRCh38 Dataset}
 \format{
 A data frame with columns Rsid, Gwas_trait, P_value Gene, Validation, Pubmedid, Chr, Position, Ref, Alt, Variant_type
 }
 \usage{
-JnO_GRCh38
+JnO_GRCh38_man
 }
 \description{
 This dataset contains GWAS information from the Johnson and O'donnell database.
