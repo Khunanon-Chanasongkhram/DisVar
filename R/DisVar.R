@@ -9,9 +9,6 @@
 #' @import dplyr
 #' @export
 #'
-#' @examples
-#' DisVar("C:/DisVar/file_name.vcf")
-#'
 
 DisVar <- function(file = "file_name.vcf"){
   # Load required libraries
