@@ -1,5 +1,5 @@
 Khunanon Chanasongkhram
-22/07/2023
+14/08/2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -110,12 +110,6 @@ Here’s an example of how to use the function:
 
 ``` r
 library(DisVar)
-#> Warning: replacing previous import 'data.table::between' by 'dplyr::between'
-#> when loading 'DisVar'
-#> Warning: replacing previous import 'data.table::first' by 'dplyr::first' when
-#> loading 'DisVar'
-#> Warning: replacing previous import 'data.table::last' by 'dplyr::last' when
-#> loading 'DisVar'
 DisVar("file_name.vcf")
 #> Loading required package: sqldf
 #> Warning: package 'sqldf' was built under R version 4.3.1
@@ -127,6 +121,7 @@ DisVar("file_name.vcf")
 #> Loading required package: data.table
 #> Warning: package 'data.table' was built under R version 4.3.1
 #> Loading required package: dplyr
+#> Warning: package 'dplyr' was built under R version 4.3.1
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:data.table':
