@@ -16,6 +16,6 @@ A data frame containing variant information from various databases
 This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 }
 \examples{
-DisVar("file_name.vcf")
+DisVar("C:/DisVar/file_name.vcf")
 
 }

@@ -2,9 +2,8 @@
 
 export(DisVar)
 import(sqldf)
-importFrom(data.table,between)
-importFrom(data.table,first)
-importFrom(data.table,last)
+importFrom(data.table,fread)
+importFrom(data.table,setDT)
 importFrom(dplyr,between)
 importFrom(dplyr,first)
 importFrom(dplyr,last)
