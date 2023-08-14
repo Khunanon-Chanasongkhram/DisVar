@@ -3,12 +3,13 @@
 \docType{data}
 \name{GRASP_GRCh38}
 \alias{GRASP_GRCh38}
+\alias{GRASP_GRCh38_man}
 \title{GRASP_GRCh38 Dataset}
 \format{
 A data frame with columns Rsid, Chr_37, Position_37, P_value, Pubmedid, Gwas_trait, Phenotype_escription, Chr, Position, Gene, Ref, Alt, Variant_type
 }
 \usage{
-GRASP_GRCh38
+GRASP_GRCh38_man
 }
 \description{
 This dataset contains GWAS information from the GRASP database.
