@@ -27,9 +27,11 @@ DisVar is an R package that finds diseases from a VCF file by comparing the vari
 ## Dependencies
 The package depends on the following packages:
 
-- `sqldf`
 - `data.table`
 - `dplyr`
+- `sqldf`
+- `stats`
+- `utils`
 
 ## Usage
 

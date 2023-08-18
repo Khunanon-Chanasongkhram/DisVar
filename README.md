@@ -90,9 +90,11 @@ Now the DisVar is ready to use!
 
 The package depends on the following packages:
 
-- `sqldf`
 - `data.table`
 - `dplyr`
+- `sqldf`
+- `stats`
+- `utils`
 
 ## Usage
 
