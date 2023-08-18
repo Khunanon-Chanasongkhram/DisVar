@@ -7,6 +7,8 @@
 #' @importFrom data.table fread setDT
 #' @import sqldf
 #' @import dplyr
+#' @importFrom stats setNames
+#' @importFrom utils data install.packages write.table
 #' @export
 #'
 
@@ -30,14 +32,16 @@ DisVar <- function(file = "file_name.vcf"){
 
   #Read files
   cat("\nReading files...\n")
-  data(GWASdb_GRCh38)
-  data(GRASP_GRCh38)
-  data(GWAS_catalog_GRCh38)
-  data(GAD_GRCh38)
-  data(JnO_GRCh38)
+  GWASdb_GRCh38 <- V1 <- P_value <- Rsid <- Chr <- V4 <- V5 <- Ref <- Alt <- Gwas_trait <- Gene <- Variant_type <- V6 <- V7 <- V8 <- V2 <- GRASP_GRCh38 <-GWAS_catalog_GRCh38 <- JnO_GRCh38 <- Disease <- Confident <- NULL
+  GWASdb_GRCh38 <- DisVar::GWASdb_GRCh38
+  GRASP_GRCh38 <- DisVar::GRASP_GRCh38
+  GWAS_catalog_GRCh38 <- DisVar::GWAS_catalog_GRCh38
+  GAD_GRCh38 <- DisVar::GAD_GRCh38
+  JnO_GRCh38 <- DisVar::JnO_GRCh38
   grep <- "grep -v '^#'"
   suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =FALSE))
 
+  . <- NULL
   chr <- c()
   allele_db_list <- c()
   allele_sample_list <- c()
@@ -91,7 +95,7 @@ DisVar <- function(file = "file_name.vcf"){
   #find variant that in the Johnson and O'Donnell database
   op_df_JnO <- setDT(JnO_GRCh38)[setDT(variant_data),
                                  on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
-                                 .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+                                                                  .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
 
   if (nrow(op_df_JnO) > 0)
   {
@@ -167,7 +171,7 @@ DisVar <- function(file = "file_name.vcf"){
 #'
 #' @name GAD_GRCh38
 #' @format A data frame with columns Rsid, Gene, Gwas_trait, Disease_class, PubmedID, Chr, Position, Ref, Alt, P_value, Variant_type
-GAD_GRCh38_man <- data(GAD_GRCh38)
+GAD_GRCh38_man <- data(GAD_GRCh38, envir = environment())
 
 #' GRASP_GRCh38 Dataset
 #'
@@ -175,7 +179,7 @@ GAD_GRCh38_man <- data(GAD_GRCh38)
 #'
 #' @name GRASP_GRCh38
 #' @format A data frame with columns Rsid, Chr_37, Position_37, P_value, Pubmedid, Gwas_trait, Phenotype_escription, Chr, Position, Gene, Ref, Alt, Variant_type
-GRASP_GRCh38_man <- data(GRASP_GRCh38)
+GRASP_GRCh38_man <- data(GRASP_GRCh38, envir = environment())
 
 #' GWAS_catalog_GRCh38 Dataset
 #'
@@ -183,7 +187,7 @@ GRASP_GRCh38_man <- data(GRASP_GRCh38)
 #'
 #' @name GWAS_catalog_GRCh38
 #' @format A data frame with columns Rsid, Chr_37, Position_37, Gwas_trait, Gene, Variant_type, P_value, Pubmedid, Chr, Position, Ref, Alt
-GWAS_catalog_GRCh38_man <- data(GWAS_catalog_GRCh38)
+GWAS_catalog_GRCh38_man <- data(GWAS_catalog_GRCh38, envir = environment())
 
 #' GWASdb_GRCh38 Dataset
 #'
@@ -191,7 +195,7 @@ GWAS_catalog_GRCh38_man <- data(GWAS_catalog_GRCh38)
 #'
 #' @name GWASdb_GRCh38
 #' @format A data frame with columns Rsid, Chr_37, Position_37, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, Pubmedid, Chr, Position
-GWASdb_GRCh38_man <- data(GWASdb_GRCh38)
+GWASdb_GRCh38_man <- data(GWASdb_GRCh38, envir = environment())
 
 #' JnO_GRCh38 Dataset
 #'
@@ -199,4 +203,4 @@ GWASdb_GRCh38_man <- data(GWASdb_GRCh38)
 #'
 #' @name JnO_GRCh38
 #' @format A data frame with columns Rsid, Gwas_trait, P_value Gene, Validation, Pubmedid, Chr, Position, Ref, Alt, Variant_type
-JnO_GRCh38_man <- data(JnO_GRCh38)
+JnO_GRCh38_man <- data(JnO_GRCh38, envir = environment())
