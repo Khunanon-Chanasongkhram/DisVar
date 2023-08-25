@@ -179,4 +179,4 @@ results are shown in the following table.
   information on the VCF format can be found at the [VCF specification
   page](http://samtools.github.io/hts-specs/VCFv4.3.pdf)
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DisVar)](https://cran.r-project.org/package=DisVar)
+[![DOI](https://zenodo.org/badge/587268783.svg)](https://zenodo.org/badge/latestdoi/587268783)
