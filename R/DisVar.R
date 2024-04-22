@@ -38,8 +38,7 @@ DisVar <- function(file = "file_name.vcf"){
   GWAS_catalog_GRCh38 <- DisVar::GWAS_catalog_GRCh38
   GAD_GRCh38 <- DisVar::GAD_GRCh38
   JnO_GRCh38 <- DisVar::JnO_GRCh38
-  grep <- "grep -v '^#'"
-  suppressWarnings(variant_data <- fread(cmd = paste(grep, file), sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =FALSE))
+  suppressWarnings(variant_data <- fread(file, sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =FALSE))
 
   . <- NULL
   chr <- c()
