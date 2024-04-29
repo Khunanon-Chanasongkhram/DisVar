@@ -38,7 +38,8 @@ DisVar <- function(file = "file_name.vcf"){
   GWAS_catalog_GRCh38 <- DisVar::GWAS_catalog_GRCh38
   GAD_GRCh38 <- DisVar::GAD_GRCh38
   JnO_GRCh38 <- DisVar::JnO_GRCh38
-  suppressWarnings(variant_data <- fread(file, sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =FALSE))
+  suppressWarnings(variant_data <- fread(file, sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =TRUE))
+  colnames(variant_data) <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8")
 
   . <- NULL
   chr <- c()
