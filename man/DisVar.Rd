@@ -4,7 +4,15 @@
 \alias{DisVar}
 \title{Find diseases from the VCF file}
 \usage{
-DisVar(file = "file_name.vcf")
+DisVar(
+  file = "file_name.vcf",
+  GWASdb = TRUE,
+  GRASP = TRUE,
+  GWASCat = TRUE,
+  GAD = TRUE,
+  JohnO = TRUE,
+  p_value = 1e-07
+)
 }
 \arguments{
 \item{file}{the name of the VCF file.}

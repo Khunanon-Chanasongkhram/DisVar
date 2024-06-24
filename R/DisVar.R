@@ -12,7 +12,7 @@
 #' @export
 #'
 
-DisVar <- function(file = "file_name.vcf"){
+DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, p_value = 1e-7) {
   # Load required libraries
   required_packages <- c("sqldf", "data.table", "dplyr")
   for (package in required_packages) {
@@ -29,6 +29,19 @@ DisVar <- function(file = "file_name.vcf"){
   if (!grepl(".vcf$", file, ignore.case = TRUE)) {
     stop("Input file must be a VCF file")
   }
+
+  #Check database parameter
+  databases <- list(
+    "GWASdb" = GWASdb,
+    "GRASP" = GRASP,
+    "GWASCat" = GWASCat,
+    "GAD" = GAD,
+    "JohnO" = JohnO)
+
+  if (!any(unlist(databases))) {
+    stop("Please select at least one database")
+  }
+
 
   #Read files
   cat("\nReading files...\n")
@@ -52,83 +65,72 @@ DisVar <- function(file = "file_name.vcf"){
   #Search databases
   cat("Searching...\n")
 
+  result_df <- NULL
 
-  #find variant that in the GWASdb database
-
-  op_df_GWASdb <- setDT(GWASdb_GRCh38)[setDT(variant_data),
-                                       on = .(Position = V2, Chr = V1)][P_value < 0.0000001, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
-
-  if (nrow(op_df_GWASdb) > 0)
-  {
-    op_df_GWASdb$DB <- "GWASdb"
+  for (db in names(databases)) {
+    if (databases[[db]]) {
+      op_df <- NULL
+      switch(db,
+             "GWASdb" = {
+               op_df <- setDT(GWASdb_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$DB <- "GWASdb"
+             },
+             "GRASP" = {
+               op_df <- setDT(GRASP_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$DB <- "GRASP"
+             },
+             "GWASCat" = {
+               op_df <- setDT(GWAS_catalog_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$DB <- "GWAS Catalog"
+             },
+             "GAD" = {
+               GAD_GRCh38$P_value <- 0
+               op_df <- setDT(GAD_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
+               op_df$P_value <- NA
+               op_df$DB <- "GADCDC"
+             },
+             "JohnO" = {
+               op_df <- setDT(JnO_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$DB <- "Johnson and O'Donnell"
+             }
+      )
+      if (nrow(op_df) > 0) {
+        if (is.null(result_df)) {
+          result_df <- op_df
+        } else {
+          result_df <- rbind(result_df, op_df, fill = TRUE)
+        }
+      }
+    }
   }
-
-  #find variant that in the GRASP database
-  op_df_GRASP <- setDT(GRASP_GRCh38)[setDT(variant_data),
-                                     on = .(Position = V2, Chr = V1)][P_value < 0.0000001, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
-
-  if (nrow(op_df_GRASP) > 0)
-  {
-    op_df_GRASP$DB <- "GRASP"
-  }
-
-  #find variant that in the GWAS catalog database
-  op_df_GWAS_catalog <- setDT(GWAS_catalog_GRCh38)[setDT(variant_data),
-                                                   on = .(Position = V2, Chr = V1)][P_value < 0.0000001, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
-
-  if (nrow(op_df_GWAS_catalog) > 0)
-  {
-    op_df_GWAS_catalog$DB <- "GWAS Catalog"
-  }
-
-  #find variant that in the GAD database
-  GAD_GRCh38$P_value <- 0
-  op_df_GAD <- setDT(GAD_GRCh38)[setDT(variant_data),
-                                 on = .(Position = V2, Chr = V1)][P_value < 0.0000001, .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
-  op_df_GAD$P_value <- NA
-
-  if (nrow(op_df_GAD) > 0)
-  {
-    op_df_GAD$DB <- "GADCDC"
-  }
-
-  #find variant that in the Johnson and O'Donnell database
-  op_df_JnO <- setDT(JnO_GRCh38)[setDT(variant_data),
-                                 on = .(Position = V2, Chr = V1)][P_value < 0.0000001,
-                                                                  .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
-
-  if (nrow(op_df_JnO) > 0)
-  {
-    op_df_JnO$DB <- "Johnson and O'Donnell"
-  }
-  op_df <- rbind(op_df_GWASdb,op_df_GRASP,op_df_GWAS_catalog,op_df_GAD,op_df_JnO, fill=TRUE)
 
   cat("Searching...DONE\n")
 
   cat("Processing results...\n")
-  #If no variant is found, Exit program
-  if (nrow(op_df) == 0)
-  {
-    stop(paste('No variant was found in the database'))
-    #EXIT command
+
+  # If no variant is found, Exit program
+  if (is.null(result_df) || nrow(result_df) == 0) {
+    stop("No variant was found in the selected databases")
+    # EXIT command
   }
 
+
   #create results in a table
-  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(op_df))), c("Disease", "Chrom", "Position", "Gene", "Variant ID", "Variant Type", "Allele Sample", "Allele DB", "Confident", "DB", "Qual", "Filter", "Info"))
+  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(result_df))), c("Disease", "Chrom", "Position", "Gene", "Variant ID", "Variant Type", "Allele Sample", "Allele DB", "Confident", "DB", "Qual", "Filter", "Info"))
 
-  align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM op_df')
-  align_df["Chrom"] <- sqldf('SELECT Chr FROM op_df')
-  align_df["Position"] <- sqldf('SELECT Position FROM op_df')
-  align_df["Gene"] <- sqldf('SELECT Gene FROM op_df')
-  align_df["Variant ID"] <- sqldf('SELECT Rsid FROM op_df')
-  align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM op_df')
+  align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM result_df')
+  align_df["Chrom"] <- sqldf('SELECT Chr FROM result_df')
+  align_df["Position"] <- sqldf('SELECT Position FROM result_df')
+  align_df["Gene"] <- sqldf('SELECT Gene FROM result_df')
+  align_df["Variant ID"] <- sqldf('SELECT Rsid FROM result_df')
+  align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM result_df')
 
-  op_df$Ref <- as.character(op_df$Ref)
-  op_df$Alt <- as.character(op_df$Alt)
-  for (i in 1:nrow(op_df))
+  result_df$Ref <- as.character(result_df$Ref)
+  result_df$Alt <- as.character(result_df$Alt)
+  for (i in 1:nrow(result_df))
   {
-    ref_db <- op_df[i,6]
-    alt_db <- op_df[i,7]
+    ref_db <- result_df[i,6]
+    alt_db <- result_df[i,7]
     if (is.na(ref_db)) {allele_db_list <- append(allele_db_list,NA)}
     else
     {
@@ -138,20 +140,20 @@ DisVar <- function(file = "file_name.vcf"){
   }
   align_df["Allele DB"] <- allele_db_list
 
-  for (i in 1:nrow(op_df))
+  for (i in 1:nrow(result_df))
   {
-    ref_sample <- op_df[i,4]
-    alt_sample <- op_df[i,5]
+    ref_sample <- result_df[i,4]
+    alt_sample <- result_df[i,5]
     allele_sample = paste(ref_sample, alt_sample, sep = ">")
     allele_sample_list <- append(allele_sample_list,allele_sample)
   }
   align_df["Allele Sample"] <- allele_sample_list
 
-  align_df["Confident"] <- sqldf('SELECT P_value FROM op_df')
-  align_df["DB"] <- sqldf('SELECT DB FROM op_df')
-  align_df["Qual"] <- sqldf('SELECT V6 FROM op_df')
-  align_df["Filter"] <- sqldf('SELECT V7 FROM op_df')
-  align_df["Info"] <- sqldf('SELECT V8 FROM op_df')
+  align_df["Confident"] <- sqldf('SELECT P_value FROM result_df')
+  align_df["DB"] <- sqldf('SELECT DB FROM result_df')
+  align_df["Qual"] <- sqldf('SELECT V6 FROM result_df')
+  align_df["Filter"] <- sqldf('SELECT V7 FROM result_df')
+  align_df["Info"] <- sqldf('SELECT V8 FROM result_df')
 
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
