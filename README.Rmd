@@ -119,7 +119,7 @@ library(DisVar)
 DisVar("file_name.vcf")
 ```
 
-You will get this output file: `file_name`_DisVar.txt
+You will get this output file: `file_name`_DisVar.tsv
 
 When you test the program with the test file (`file_name.vcf`), the results are shown in the following table.
 

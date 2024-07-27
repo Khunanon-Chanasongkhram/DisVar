@@ -1,14 +1,14 @@
 Package: DisVar
 Title: Find Diseases from the VCF File
-Version: 1.1.5
+Version: 1.1.6
 Authors@R: 
     person("Khunanon", "Chanasongkhram", , "chanasongkhram.k@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5898-4183"))
 Description: A function for finding diseases from a vcf file by comparing the variants in the VCF file with those in various databases.
-License: PSU LICENSE
+License: MIT LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
 Imports: data.table, dplyr, sqldf, stats, utils
