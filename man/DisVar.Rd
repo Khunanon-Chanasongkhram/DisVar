@@ -5,13 +5,14 @@
 \title{Find diseases from the VCF file}
 \usage{
 DisVar(
-  file = "file_name.vcf",
+  file,
   GWASdb = TRUE,
   GRASP = TRUE,
   GWASCat = TRUE,
   GAD = TRUE,
   JohnO = TRUE,
-  p_value = 1e-07
+  p_value = 1e-07,
+  runOnShiny = FALSE
 )
 }
 \arguments{
