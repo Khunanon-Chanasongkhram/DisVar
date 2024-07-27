@@ -12,9 +12,11 @@
 #' @export
 #'
 
-DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, p_value = 1e-7) {
+DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
   # Load required libraries
-  required_packages <- c("sqldf", "data.table", "dplyr")
+  required_packages <- c("sqldf", "data.table", "dplyr")  # List of required packages
+
+  # Check and install dependencies
   for (package in required_packages) {
     if (!require(package, character.only = TRUE)) {
       install.packages(package)
@@ -22,15 +24,19 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
     }
   }
 
-  # Validate inputs
-  if (!file.exists(file)) {
-    stop("File does not exist")
-  }
-  if (!grepl(".vcf$", file, ignore.case = TRUE)) {
-    stop("Input file must be a VCF file")
-  }
+  # Check if not running on Shiny, validate the file
+  if (!runOnShiny) {
+    # Ensure that a VCF file is exist in the directory
+    if (!file.exists(file)) {
+    stop("File does not exist")  # Stop if the file does not exist
+      }
+    # Ensure that the file extension is ".vcf"
+    if (!grepl(".vcf$", file, ignore.case = TRUE)) {
+    stop("Input file must be a VCF file")   # Stop if the file is not a VCF file
+      }
+    }
 
-  #Check database parameter
+  # Create a list of selected databases
   databases <- list(
     "GWASdb" = GWASdb,
     "GRASP" = GRASP,
@@ -38,6 +44,7 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
     "GAD" = GAD,
     "JohnO" = JohnO)
 
+  # Check if at least one database is selected
   if (!any(unlist(databases))) {
     stop("Please select at least one database")
   }
@@ -45,19 +52,36 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
 
   #Read files
   cat("\nReading files...\n")
-  GWASdb_GRCh38 <- V1 <- P_value <- Rsid <- Chr <- V4 <- V5 <- Ref <- Alt <- Gwas_trait <- Gene <- Variant_type <- V6 <- V7 <- V8 <- V2 <- GRASP_GRCh38 <-GWAS_catalog_GRCh38 <- JnO_GRCh38 <- Disease <- Confident <- NULL
+
+  # Declare all variables
+  GWASdb_GRCh38 <- V1 <- P_value <- Rsid <- Chr <- V4 <- V5 <- Ref <- Alt <- Gwas_trait <- Gene <- Variant_type <- V6 <- V7 <- V8 <- V2 <- GRASP_GRCh38 <- GWAS_catalog_GRCh38 <- JnO_GRCh38 <- Disease <- Confident <- vcf_data <- NULL
+
+  # Retrieve all databases
   GWASdb_GRCh38 <- DisVar::GWASdb_GRCh38
   GRASP_GRCh38 <- DisVar::GRASP_GRCh38
   GWAS_catalog_GRCh38 <- DisVar::GWAS_catalog_GRCh38
   GAD_GRCh38 <- DisVar::GAD_GRCh38
   JnO_GRCh38 <- DisVar::JnO_GRCh38
+
+  # Read VCF data using fread if not running on Shiny
+  if (!runOnShiny) {
   suppressWarnings(variant_data <- fread(file, sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =TRUE))
+  }
+  else {
+    # Extract VCF data from Shiny
+    variant_data <- file
+  }
+
+  # Change column names
   colnames(variant_data) <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8")
 
+  # Declare list
   . <- NULL
   chr <- c()
   allele_db_list <- c()
   allele_sample_list <- c()
+
+  # Define the class of variables in columns; it makes SQL searches faster!
   variant_data$V1<-gsub("chr","",as.character(variant_data$V1))
   variant_data$V2 <- as.integer(variant_data$V2)
   cat("Reading files...DONE\n")
@@ -65,11 +89,13 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
   #Search databases
   cat("Searching...\n")
 
+  # create an empty list to store results from each database
   result_df <- NULL
 
+  #Searching in selected databases
   for (db in names(databases)) {
     if (databases[[db]]) {
-      op_df <- NULL
+      op_df <- NULL  # Initialize an empty data frame for the current database
       switch(db,
              "GWASdb" = {
                op_df <- setDT(GWASdb_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
@@ -94,6 +120,7 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
                op_df$DB <- "Johnson and O'Donnell"
              }
       )
+      # If the result from the current database is not empty, combine it with the previous results
       if (nrow(op_df) > 0) {
         if (is.null(result_df)) {
           result_df <- op_df
@@ -118,6 +145,7 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
   #create results in a table
   align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(result_df))), c("Disease", "Chrom", "Position", "Gene", "Variant ID", "Variant Type", "Allele Sample", "Allele DB", "Confident", "DB", "Qual", "Filter", "Info"))
 
+  # Populate the results table with data from result_df
   align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM result_df')
   align_df["Chrom"] <- sqldf('SELECT Chr FROM result_df')
   align_df["Position"] <- sqldf('SELECT Position FROM result_df')
@@ -125,8 +153,11 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
   align_df["Variant ID"] <- sqldf('SELECT Rsid FROM result_df')
   align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM result_df')
 
+  # Create allele sample and allele DB lists
   result_df$Ref <- as.character(result_df$Ref)
   result_df$Alt <- as.character(result_df$Alt)
+
+  # Populate the allele DB list
   for (i in 1:nrow(result_df))
   {
     ref_db <- result_df[i,6]
@@ -140,6 +171,7 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
   }
   align_df["Allele DB"] <- allele_db_list
 
+  # Populate the allele sample list
   for (i in 1:nrow(result_df))
   {
     ref_sample <- result_df[i,4]
@@ -149,22 +181,30 @@ DisVar <- function(file = "file_name.vcf", GWASdb = TRUE, GRASP = TRUE, GWASCat 
   }
   align_df["Allele Sample"] <- allele_sample_list
 
+  # Populate the remaining columns in align_df
   align_df["Confident"] <- sqldf('SELECT P_value FROM result_df')
   align_df["DB"] <- sqldf('SELECT DB FROM result_df')
   align_df["Qual"] <- sqldf('SELECT V6 FROM result_df')
   align_df["Filter"] <- sqldf('SELECT V7 FROM result_df')
   align_df["Info"] <- sqldf('SELECT V8 FROM result_df')
 
+  # Arrange the results by Disease and Confident
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   colnames(aligned_df)[9] <- "P-value"
   cat("Processing results...DONE\n")
+
+  # If not running on Shiny, generate the result file
+  if (!runOnShiny) {
   cat("Generating result file...\n")
   output_file <- sub(".vcf", "_DisVar.txt", file)
   write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
   cat("Generating result file...DONE\n")
   cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
+  }
+
+  return(aligned_df)
 }
 
 #' GAD_GRCh38 Dataset
