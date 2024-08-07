@@ -23,6 +23,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
       suppressPackageStartupMessages(library(package, character.only = TRUE))
     }
   }
+  rm(required_packages)
 
   # Check if not running on Shiny, validate the file
   if (!runOnShiny) {
@@ -130,6 +131,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
       }
     }
   }
+  rm(variant_data, databases, op_df,GWASdb_GRCh38, GRASP_GRCh38, GWAS_catalog_GRCh38, GAD_GRCh38, JnO_GRCh38)
 
   cat("Searching...DONE\n")
 
@@ -188,17 +190,22 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   align_df["Filter"] <- sqldf('SELECT V7 FROM result_df')
   align_df["Info"] <- sqldf('SELECT V8 FROM result_df')
 
+
   # Arrange the results by Disease and Confident
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
+  if (!runOnShiny) {
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
+  }
   colnames(aligned_df)[9] <- "P-value"
+
+  rm(result_df, align_df, chr, allele_db_list, allele_sample_list)
   cat("Processing results...DONE\n")
 
   # If not running on Shiny, generate the result file
   if (!runOnShiny) {
   cat("Generating result file...\n")
-  output_file <- sub(".vcf", "_DisVar.txt", file)
+  output_file <- sub(".vcf", "_DisVar.tsv", file)
   write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
   cat("Generating result file...DONE\n")
   cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
