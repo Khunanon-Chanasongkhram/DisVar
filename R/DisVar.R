@@ -145,7 +145,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
 
 
   #create results in a table
-  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(result_df))), c("Disease", "Chrom", "Position", "Gene", "Variant ID", "Variant Type", "Allele Sample", "Allele DB", "Confident", "DB", "Qual", "Filter", "Info"))
+  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(result_df))), c("Disease", "DB", "Gene", "Variant Type", "Chrom", "Position", "Variant ID", "Allele Sample", "Allele DB", "Confident", "Qual", "Filter", "Info"))
 
   # Populate the results table with data from result_df
   align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM result_df')
