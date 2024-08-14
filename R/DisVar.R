@@ -209,6 +209,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
   cat("Generating result file...DONE\n")
   cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
+  return()
   }
 
   return(aligned_df)
