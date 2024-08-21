@@ -197,7 +197,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   if (!runOnShiny) {
   aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   }
-  colnames(aligned_df)[9] <- "P-value"
+  colnames(aligned_df)[10] <- "P-value"
 
   rm(result_df, align_df, chr, allele_db_list, allele_sample_list)
   cat("Processing results...DONE\n")
