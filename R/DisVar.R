@@ -12,7 +12,7 @@
 #' @export
 #'
 
-DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
+DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
   # Load required libraries
   required_packages <- c("sqldf", "data.table", "dplyr")  # List of required packages
 
@@ -43,7 +43,8 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
     "GRASP" = GRASP,
     "GWASCat" = GWASCat,
     "GAD" = GAD,
-    "JohnO" = JohnO)
+    "JohnO" = JohnO,
+    "ClinVar" = ClinVar)
 
   # Check if at least one database is selected
   if (!any(unlist(databases))) {
@@ -55,7 +56,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   cat("\nReading files...\n")
 
   # Declare all variables
-  GWASdb_GRCh38 <- V1 <- P_value <- Rsid <- Chr <- V4 <- V5 <- Ref <- Alt <- Gwas_trait <- Gene <- Variant_type <- V6 <- V7 <- V8 <- V2 <- GRASP_GRCh38 <- GWAS_catalog_GRCh38 <- JnO_GRCh38 <- Disease <- Confident <- vcf_data <- NULL
+  GWASdb_GRCh38 <- ClinVar_GRCh38 <- V1 <- P_value <- Rsid <- Chr <- V4 <- V5 <- Ref <- Alt <- Gwas_trait <- Gene <- Variant_type <- V6 <- V7 <- V8 <- V2 <- GRASP_GRCh38 <- GWAS_catalog_GRCh38 <- JnO_GRCh38 <- Disease <- Confident <- vcf_data <- NULL
 
   # Retrieve all databases
   GWASdb_GRCh38 <- DisVar::GWASdb_GRCh38
@@ -63,6 +64,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   GWAS_catalog_GRCh38 <- DisVar::GWAS_catalog_GRCh38
   GAD_GRCh38 <- DisVar::GAD_GRCh38
   JnO_GRCh38 <- DisVar::JnO_GRCh38
+  ClinVar_GRCh38 <- DisVar::ClinVar_GRCh38
 
   # Read VCF data using fread if not running on Shiny
   if (!runOnShiny) {
@@ -111,14 +113,16 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
                op_df$DB <- "GWAS Catalog"
              },
              "GAD" = {
-               GAD_GRCh38$P_value <- 0
                op_df <- setDT(GAD_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
-               op_df$P_value <- NA
                op_df$DB <- "GADCDC"
              },
              "JohnO" = {
                op_df <- setDT(JnO_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
                op_df$DB <- "Johnson and O'Donnell"
+             },
+             "ClinVar" = {
+               op_df <- setDT(ClinVar_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$DB <- "ClinVar"
              }
       )
       # If the result from the current database is not empty, combine it with the previous results
@@ -131,7 +135,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
       }
     }
   }
-  rm(variant_data, databases, op_df,GWASdb_GRCh38, GRASP_GRCh38, GWAS_catalog_GRCh38, GAD_GRCh38, JnO_GRCh38)
+  rm(variant_data, databases, op_df,GWASdb_GRCh38, GRASP_GRCh38,ClinVar_GRCh38, GWAS_catalog_GRCh38, GAD_GRCh38, JnO_GRCh38)
 
   cat("Searching...DONE\n")
 
@@ -252,5 +256,13 @@ GWASdb_GRCh38_man <- data(GWASdb_GRCh38, envir = environment())
 #' This dataset contains GWAS information from the Johnson and O'donnell database.
 #'
 #' @name JnO_GRCh38
-#' @format A data frame with columns Rsid, Gwas_trait, P_value Gene, Validation, Pubmedid, Chr, Position, Ref, Alt, Variant_type
+#' @format A data frame with columns Rsid, Gwas_trait, P_value, Gene, Validation, Pubmedid, Chr, Position, Ref, Alt, Variant_type
 JnO_GRCh38_man <- data(JnO_GRCh38, envir = environment())
+
+#' ClinVar_GRCh38 Dataset
+#'
+#' This dataset contains GWAS information from the ClinVar database.
+#'
+#' @name ClinVar_GRCh38
+#' @format A data frame with columns Chr, Position, ID, Ref, Alt, QUAL, FILTER, INFO, ALLELEID, Gwas_trait, CLNSIG, CLNVC, Variant_type, P_value, Gene
+ClinVar_GRCh38_man <- data(ClinVar_GRCh38, envir = environment())
