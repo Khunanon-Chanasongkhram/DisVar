@@ -11,6 +11,7 @@ DisVar(
   GWASCat = TRUE,
   GAD = TRUE,
   JohnO = TRUE,
+  ClinVar = TRUE,
   p_value = 1e-07,
   runOnShiny = FALSE
 )
