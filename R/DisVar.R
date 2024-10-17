@@ -113,7 +113,9 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
                op_df$DB <- "GWAS Catalog"
              },
              "GAD" = {
+               GAD_GRCh38$P_value <- 0
                op_df <- setDT(GAD_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid , Chr , Position, V4, V5, Ref, Alt, P_value, Gwas_trait , Gene , Variant_type, V6, V7, V8)]
+               op_df$P_value <- NA
                op_df$DB <- "GADCDC"
              },
              "JohnO" = {
@@ -121,7 +123,9 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
                op_df$DB <- "Johnson and O'Donnell"
              },
              "ClinVar" = {
+               ClinVar_GRCh38$P_value <- 0
                op_df <- setDT(ClinVar_GRCh38)[setDT(variant_data), on = .(Position = V2, Chr = V1)][P_value < p_value, .(Rsid, Chr, Position, V4, V5, Ref, Alt, P_value, Gwas_trait, Gene, Variant_type, V6, V7, V8)]
+               op_df$P_value <- NA
                op_df$DB <- "ClinVar"
              }
       )
