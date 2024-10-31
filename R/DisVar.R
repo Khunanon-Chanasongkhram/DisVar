@@ -7,6 +7,8 @@
 #' @importFrom data.table fread setDT
 #' @import sqldf
 #' @import dplyr
+#' @import ggplot2
+#' @import wesanderson
 #' @importFrom stats setNames
 #' @importFrom utils data install.packages write.table
 #' @export
@@ -14,7 +16,7 @@
 
 DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
   # Load required libraries
-  required_packages <- c("sqldf", "data.table", "dplyr")  # List of required packages
+  required_packages <- c("sqldf", "data.table", "dplyr", "ggplot2", "wesanderson")  # List of required packages
 
   # Check and install dependencies
   for (package in required_packages) {
@@ -26,15 +28,8 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   rm(required_packages)
 
   # Check if not running on Shiny, validate the file
-  if (!runOnShiny) {
-    # Ensure that a VCF file is exist in the directory
-    if (!file.exists(file)) {
-      stop("File does not exist")  # Stop if the file does not exist
-    }
-    # Ensure that the file extension is ".vcf"
-    if (!grepl(".vcf$", file, ignore.case = TRUE)) {
-      stop("Input file must be a VCF file")   # Stop if the file is not a VCF file
-    }
+  if (!runOnShiny && (!file.exists(file) || !grepl(".vcf$", file, ignore.case = TRUE))) {
+    stop("A valid VCF file (.vcf or .vcf.gz) is required.")
   }
 
   # Create a list of selected databases
@@ -45,6 +40,8 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
     "GAD" = GAD,
     "JohnO" = JohnO,
     "ClinVar" = ClinVar)
+  count_true <- sum(unlist(databases))
+
 
   # Check if at least one database is selected
   if (!any(unlist(databases))) {
@@ -191,10 +188,43 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   # Rename column "Confident" to "P-value"
   colnames(aligned_df)[10] <- "P-value"
 
-  # Clear unused variables
-  rm(result_df, align_df)
-
   cat("Processing results...DONE\n")
+  # Statistical output
+  total_variants <- nrow(align_df)
+  database_counts <- table(align_df$DB)
+
+  cat("\nStatistical Summary\n")
+  cat("Total Variants Found:", total_variants, "\n")
+  cat("Variants per Database:\n")
+  print(database_counts)
+
+  # Plotting
+  if (nrow(align_df) > 0) {
+    # Variants per database plot
+    print(ggplot(align_df, aes(x = DB, fill = DB)) +
+            geom_bar(alpha = 0.8, color = "black") +
+            labs(title = "Number of Variants per Database", x = "Database", y = "Count (Hits)") +
+            scale_fill_manual(values = wes_palette("Zissou1", n = count_true, type = "continuous")) +
+            theme_classic() +
+            theme(plot.title = element_text(hjust = 0.5))
+    )}
+
+    # Top 10 diseases or traits plot
+    top_diseases <- align_df %>%
+      group_by(Disease) %>%
+      tally(sort = TRUE) %>%
+      slice_head(n = 10)
+
+    if (nrow(top_diseases) > 0) {
+      print(ggplot(top_diseases, aes(x = reorder(Disease, n), y = n, fill = Disease)) +
+              geom_bar(stat = "identity", alpha = 0.8, color = "black") +
+              labs(title = "Top 10 Diseases or Traits", x = "Disease/Trait", y = "Count (Hits)") +
+              coord_flip() +
+              scale_fill_manual(values = wes_palette("Darjeeling1", n = nrow(top_diseases), type = "continuous")) +
+              theme_minimal() +
+              theme(plot.title = element_text(hjust = 0.5), legend.position = "none")
+      )
+  }
 
   # If not running on Shiny, generate the result file
   if (!runOnShiny) {
@@ -205,6 +235,9 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
     cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
     return()
   }
+
+  # Clear unused variables
+  rm(result_df, align_df, num_databases)
 
   return(aligned_df)
 }
