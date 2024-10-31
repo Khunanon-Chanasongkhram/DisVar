@@ -7,6 +7,7 @@
 #' @importFrom data.table fread setDT
 #' @import sqldf
 #' @import dplyr
+#' @import future.apply
 #' @importFrom stats setNames
 #' @importFrom utils data install.packages write.table
 #' @export
@@ -14,7 +15,7 @@
 
 DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
   # Load required libraries
-  required_packages <- c("sqldf", "data.table", "dplyr")  # List of required packages
+  required_packages <- c("sqldf", "data.table", "dplyr","future.apply")  # List of required packages
 
   # Check and install dependencies
   for (package in required_packages) {
@@ -29,13 +30,13 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   if (!runOnShiny) {
     # Ensure that a VCF file is exist in the directory
     if (!file.exists(file)) {
-    stop("File does not exist")  # Stop if the file does not exist
-      }
+      stop("File does not exist")  # Stop if the file does not exist
+    }
     # Ensure that the file extension is ".vcf"
     if (!grepl(".vcf$", file, ignore.case = TRUE)) {
-    stop("Input file must be a VCF file")   # Stop if the file is not a VCF file
-      }
+      stop("Input file must be a VCF file")   # Stop if the file is not a VCF file
     }
+  }
 
   # Create a list of selected databases
   databases <- list(
@@ -68,7 +69,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
 
   # Read VCF data using fread if not running on Shiny
   if (!runOnShiny) {
-  suppressWarnings(variant_data <- fread(file, sep = "\t", stringsAsFactors=FALSE, showProgress=TRUE, header =TRUE))
+    suppressWarnings(variant_data <- fread(cmd = sprintf("grep -v '^##' %s", file), sep = "\t", stringsAsFactors = FALSE, showProgress = TRUE, header = TRUE))
   }
   else {
     # Extract VCF data from Shiny
@@ -203,7 +204,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
   if (!runOnShiny) {
-  aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
+    aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   }
   colnames(aligned_df)[10] <- "P-value"
 
@@ -212,12 +213,12 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
 
   # If not running on Shiny, generate the result file
   if (!runOnShiny) {
-  cat("Generating result file...\n")
-  output_file <- sub(".vcf", "_DisVar.tsv", file)
-  write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
-  cat("Generating result file...DONE\n")
-  cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
-  return()
+    cat("Generating result file...\n")
+    output_file <- sub(".vcf", "_DisVar.tsv", file)
+    write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
+    cat("Generating result file...DONE\n")
+    cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
+    return()
   }
 
   return(aligned_df)
