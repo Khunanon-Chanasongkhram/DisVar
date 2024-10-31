@@ -237,7 +237,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   }
 
   # Clear unused variables
-  rm(result_df, align_df, num_databases)
+  rm(result_df, align_df, count_true)
 
   return(aligned_df)
 }
