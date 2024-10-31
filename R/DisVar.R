@@ -7,7 +7,6 @@
 #' @importFrom data.table fread setDT
 #' @import sqldf
 #' @import dplyr
-#' @import future.apply
 #' @importFrom stats setNames
 #' @importFrom utils data install.packages write.table
 #' @export
@@ -15,7 +14,7 @@
 
 DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 1e-7, runOnShiny = FALSE) {
   # Load required libraries
-  required_packages <- c("sqldf", "data.table", "dplyr","future.apply")  # List of required packages
+  required_packages <- c("sqldf", "data.table", "dplyr")  # List of required packages
 
   # Check and install dependencies
   for (package in required_packages) {
@@ -153,62 +152,48 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   }
 
 
-  #create results in a table
-  align_df <- setNames(data.frame(matrix(ncol = 13, nrow = nrow(result_df))), c("Disease", "DB", "Gene", "Variant Type", "Chrom", "Position", "Variant ID", "Allele Sample", "Allele DB", "Confident", "Qual", "Filter", "Info"))
+  # Initialize the align_df data frame with column names
+  align_df <- data.frame(matrix(ncol = 13, nrow = nrow(result_df)))
+  colnames(align_df) <- c("Disease", "DB", "Gene", "Variant Type", "Chrom", "Position", "Variant ID", "Allele Sample", "Allele DB", "Confident", "Qual", "Filter", "Info")
 
-  # Populate the results table with data from result_df
-  align_df["Disease"] <- sqldf('SELECT Gwas_trait FROM result_df')
-  align_df["Chrom"] <- sqldf('SELECT Chr FROM result_df')
-  align_df["Position"] <- sqldf('SELECT Position FROM result_df')
-  align_df["Gene"] <- sqldf('SELECT Gene FROM result_df')
-  align_df["Variant ID"] <- sqldf('SELECT Rsid FROM result_df')
-  align_df["Variant Type"] <- sqldf('SELECT Variant_type FROM result_df')
+  # Assign columns from result_df to align_df
+  align_df$Disease <- result_df$Gwas_trait
+  align_df$Chrom <- result_df$Chr
+  align_df$Position <- result_df$Position
+  align_df$Gene <- result_df$Gene
+  align_df$`Variant ID` <- result_df$Rsid
+  align_df$`Variant Type` <- result_df$Variant_type
 
-  # Create allele sample and allele DB lists
+  # Convert 'Ref' and 'Alt' columns to character vectors
   result_df$Ref <- as.character(result_df$Ref)
   result_df$Alt <- as.character(result_df$Alt)
 
-  # Populate the allele DB list
-  for (i in 1:nrow(result_df))
-  {
-    ref_db <- result_df[i,6]
-    alt_db <- result_df[i,7]
-    if (is.na(ref_db)) {allele_db_list <- append(allele_db_list,NA)}
-    else
-    {
-      allele_db = paste(ref_db, alt_db, sep = ">")
-      allele_db_list <- append(allele_db_list,allele_db)
-    }
-  }
-  align_df["Allele DB"] <- allele_db_list
+  # Create allele lists
+  align_df$`Allele DB` <- ifelse(is.na(result_df$Ref), NA, paste(result_df$Ref, result_df$Alt, sep = ">"))
+  align_df$`Allele Sample` <- paste(result_df$Ref, result_df$Alt, sep = ">")
 
-  # Populate the allele sample list
-  for (i in 1:nrow(result_df))
-  {
-    ref_sample <- result_df[i,4]
-    alt_sample <- result_df[i,5]
-    allele_sample = paste(ref_sample, alt_sample, sep = ">")
-    allele_sample_list <- append(allele_sample_list,allele_sample)
-  }
-  align_df["Allele Sample"] <- allele_sample_list
-
-  # Populate the remaining columns in align_df
-  align_df["Confident"] <- sqldf('SELECT P_value FROM result_df')
-  align_df["DB"] <- sqldf('SELECT DB FROM result_df')
-  align_df["Qual"] <- sqldf('SELECT V6 FROM result_df')
-  align_df["Filter"] <- sqldf('SELECT V7 FROM result_df')
-  align_df["Info"] <- sqldf('SELECT V8 FROM result_df')
-
+  # Assign the remaining columns
+  align_df$Confident <- result_df$P_value
+  align_df$DB <- result_df$DB
+  align_df$Qual <- result_df$V6
+  align_df$Filter <- result_df$V7
+  align_df$Info <- result_df$V8
 
   # Arrange the results by Disease and Confident
   aligned_df <- align_df %>% arrange(Disease, Confident)
   aligned_df$Disease <- as.character(aligned_df$Disease)
+
+  # Set duplicated 'Disease' values to empty strings if not running on Shiny
   if (!runOnShiny) {
     aligned_df$Disease[duplicated(aligned_df$Disease)] <- ''
   }
+
+  # Rename column "Confident" to "P-value"
   colnames(aligned_df)[10] <- "P-value"
 
-  rm(result_df, align_df, chr, allele_db_list, allele_sample_list)
+  # Clear unused variables
+  rm(result_df, align_df)
+
   cat("Processing results...DONE\n")
 
   # If not running on Shiny, generate the result file
