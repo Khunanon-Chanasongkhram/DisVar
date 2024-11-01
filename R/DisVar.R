@@ -167,7 +167,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
 
   # Create allele lists
   align_df$`Allele DB` <- ifelse(is.na(result_df$Ref), NA, paste(result_df$Ref, result_df$Alt, sep = ">"))
-  align_df$`Allele Sample` <- paste(result_df$Ref, result_df$Alt, sep = ">")
+  align_df$`Allele Sample` <- ifelse(is.na(result_df$Ref), NA, paste(result_df$Ref, result_df$Alt, sep = ">"))
 
   # Assign the remaining columns
   align_df$Confident <- result_df$P_value
