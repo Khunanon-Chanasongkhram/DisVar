@@ -209,21 +209,21 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
             theme(plot.title = element_text(hjust = 0.5))
     )}
 
-    # Top 10 diseases or traits plot
-    top_diseases <- align_df %>%
-      group_by(Disease) %>%
-      tally(sort = TRUE) %>%
-      slice_head(n = 10)
+  # Top 10 diseases or traits plot
+  top_diseases <- align_df %>%
+    group_by(Disease) %>%
+    tally(sort = TRUE) %>%
+    slice_head(n = 10)
 
-    if (nrow(top_diseases) > 0) {
-      print(ggplot(top_diseases, aes(x = reorder(Disease, n), y = n, fill = Disease)) +
-              geom_bar(stat = "identity", alpha = 0.8, color = "black") +
-              labs(title = "Top 10 Diseases or Traits", x = "Disease/Trait", y = "Count (Hits)") +
-              coord_flip() +
-              scale_fill_manual(values = wes_palette("Darjeeling1", n = nrow(top_diseases), type = "continuous")) +
-              theme_minimal() +
-              theme(plot.title = element_text(hjust = 0.5), legend.position = "none")
-      )
+  if (nrow(top_diseases) > 0) {
+    print(ggplot(top_diseases, aes(x = reorder(Disease, n), y = n, fill = Disease)) +
+            geom_bar(stat = "identity", alpha = 0.8, color = "black") +
+            labs(title = "Top 10 Diseases or Traits", x = "Disease/Trait", y = "Count (Hits)") +
+            coord_flip() +
+            scale_fill_manual(values = wes_palette("Darjeeling1", n = nrow(top_diseases), type = "continuous")) +
+            theme_minimal() +
+            theme(plot.title = element_text(hjust = 0.5), legend.position = "none")
+    )
   }
 
   # If not running on Shiny, generate the result file
