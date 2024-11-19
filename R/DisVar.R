@@ -65,7 +65,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
 
   # Read VCF data using fread if not running on Shiny
   if (!runOnShiny) {
-    suppressWarnings(variant_data <- fread(cmd = sprintf("grep -v '^##' %s", file), sep = "\t", stringsAsFactors = FALSE, showProgress = TRUE, header = TRUE))
+    suppressWarnings(variant_data <- fread(cmd = sprintf("grep -v '^##' %s", file), sep = "\t", select = 1:8, stringsAsFactors = FALSE, showProgress = TRUE, header = TRUE))
   }
   else {
     # Extract VCF data from Shiny
