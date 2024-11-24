@@ -2,7 +2,7 @@
 % Please edit documentation in R/DisVar.R
 \name{DisVar}
 \alias{DisVar}
-\title{Find Diseases from VCF File}
+\title{Find diseases from the VCF file}
 \usage{
 DisVar(
   file,
@@ -17,34 +17,11 @@ DisVar(
 )
 }
 \arguments{
-\item{file}{Path to the VCF file}
-
-\item{GWASdb}{Logical, include GWASdb database (default: TRUE)}
-
-\item{GRASP}{Logical, include GRASP database (default: TRUE)}
-
-\item{GWASCat}{Logical, include GWAS Catalog database (default: TRUE)}
-
-\item{GAD}{Logical, include GADCDC Database (default: TRUE)}
-
-\item{JohnO}{Logical, include Johnson and O'Donnell database (default: TRUE)}
-
-\item{ClinVar}{Logical, include ClinVar database (default: TRUE)}
-
-\item{p_value}{Numeric, p-value threshold for variant selection (default: 1e-7)}
-
-\item{runOnShiny}{Logical, indicates if running in Shiny environment (default: FALSE)}
+\item{file}{the name of the VCF file.}
 }
 \value{
-A data frame with annotated variants and their disease associations
+A data frame containing variant information from various databases
 }
 \description{
-Identifies disease-associated variants by comparing VCF file variants against multiple genetic databases.
-}
-\examples{
-\dontrun{
-result <- DisVar("my_variants.vcf")
-result <- DisVar("my_variants.vcf", p_value = 1e-10, ClinVar = FALSE)
-}
-
+This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
 }
