@@ -66,8 +66,7 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   # Read VCF data using fread if not running on Shiny
   if (!runOnShiny) {
     suppressWarnings(variant_data <- fread(cmd = sprintf("grep -v '^##' %s", file), sep = "\t", select = 1:8, stringsAsFactors = FALSE, showProgress = TRUE, header = TRUE))
-  }
-  else {
+  }else {
     # Extract VCF data from Shiny
     variant_data <- file
   }
@@ -233,7 +232,6 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
     write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
     cat("Generating result file...DONE\n")
     cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
-    return()
   }
 
   # Clear unused variables
