@@ -2,9 +2,19 @@
 #' Find diseases from the VCF file
 #'
 #' This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
-#' @param file the name of the VCF file.
+#' @param file A character string specifying the path to the input VCF file (Variant Call Format) for analysis.
+#' @param GWASdb Logical. If `TRUE`, use the GWAS database for variant analysis. Defaults to `TRUE`.
+#' @param GRASP Logical. If `TRUE`, use the GRASP database for variant analysis. Defaults to `TRUE`.
+#' @param GWASCat Logical. If `TRUE`, use the GWAS Catalog database for variant analysis. Defaults to `TRUE`.
+#' @param GAD Logical. If `TRUE`, use the Genetic Association Database (GAD) for variant analysis. Defaults to `TRUE`.
+#' @param JohnO Logical. If `TRUE`, use the JohnO database for variant analysis. Defaults to `TRUE`.
+#' @param ClinVar Logical. If `TRUE`, use the ClinVar database for variant analysis. Defaults to `TRUE`.
+#' @param p_value Numeric. The p-value threshold for filtering significant associations. Variants with p-values greater than this threshold are excluded. Defaults to `1e-7`.
+#' @param runOnShiny Logical. If `TRUE`, the function is optimized for running within a Shiny application. Defaults to `FALSE`.
+#'
 #' @return A data frame containing variant information from various databases
 #' @importFrom data.table fread setDT
+#' @importFrom stats reorder
 #' @import sqldf
 #' @import dplyr
 #' @import ggplot2
