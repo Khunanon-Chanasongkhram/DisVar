@@ -3,15 +3,10 @@
 \docType{data}
 \name{ClinVar_GRCh38}
 \alias{ClinVar_GRCh38}
-\alias{ClinVar_GRCh38_man}
 \title{ClinVar_GRCh38 Dataset}
 \format{
-A data frame with columns Chr, Position, ID, Ref, Alt, QUAL, FILTER, INFO, ALLELEID, Gwas_trait, CLNSIG, CLNVC, Variant_type, P_value, Gene
-}
-\usage{
-ClinVar_GRCh38_man
+A data frame with columns: Chr, Position, ID, Ref, Alt, QUAL, FILTER, INFO, ALLELEID, Gwas_trait, CLNSIG, CLNVC, Variant_type, P_value, Gene
 }
 \description{
-This dataset contains GWAS information from the ClinVar database.
+This dataset contains variant information from the ClinVar database.
 }
-\keyword{datasets}
