@@ -3,15 +3,10 @@
 \docType{data}
 \name{GAD_GRCh38}
 \alias{GAD_GRCh38}
-\alias{GAD_GRCh38_man}
-\title{GAD_GRCh38 Dataset}
+\title{This dataset contains GWAS information from the GAD database.}
 \format{
-A data frame with columns Rsid, Gene, Gwas_trait, Disease_class, PubmedID, Chr, Position, Ref, Alt, P_value, Variant_type
-}
-\usage{
-GAD_GRCh38_man
+A data frame with columns: Rsid, Gene, Gwas_trait, Disease_class, PubmedID, Chr, Position, Ref, Alt, P_value, Variant_type
 }
 \description{
 This dataset contains GWAS information from the GAD database.
 }
-\keyword{datasets}
