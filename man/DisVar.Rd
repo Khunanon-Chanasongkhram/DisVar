@@ -13,6 +13,7 @@ DisVar(
   JohnO = TRUE,
   ClinVar = TRUE,
   p_value = 1e-07,
+  merge_result = TRUE,
   runOnShiny = FALSE
 )
 }
@@ -40,4 +41,7 @@ A data frame containing variant information from various databases
 }
 \description{
 This function finds diseases from a VCF file by comparing the variants in the VCF file with those in various databases.
+}
+\note{
+The GRASP database is now loaded from four parts (\code{GRASP_GRCh38_part1}, \code{GRASP_GRCh38_part2}, \code{GRASP_GRCh38_part3}, and \code{GRASP_GRCh38_part4}) and merged internally.
 }
