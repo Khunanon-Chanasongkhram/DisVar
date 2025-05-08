@@ -12,9 +12,10 @@ DisVar(
   GAD = TRUE,
   JohnO = TRUE,
   ClinVar = TRUE,
-  p_value = 1e-07,
-  merge_result = TRUE,
-  runOnShiny = FALSE
+  p_value = 5e-08,
+  merge_result = FALSE,
+  runOnShiny = FALSE,
+  output_path = NULL
 )
 }
 \arguments{

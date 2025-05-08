@@ -25,7 +25,7 @@
 #' @export
 #'
 
-DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 1e-7, merge_result = TRUE, runOnShiny = FALSE) {
+DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE, JohnO = TRUE, ClinVar = TRUE, p_value = 5e-8, merge_result = FALSE, runOnShiny = FALSE, output_path = NULL) {
   # Load required libraries
   required_packages <- c("sqldf", "data.table", "dplyr", "ggplot2", "wesanderson")  # List of required packages
 
@@ -249,6 +249,13 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
     write.table(aligned_df, file = output_file, quote = FALSE, sep = '\t', row.names = FALSE)
     cat("Generating result file...DONE\n")
     cat("The output file is saved as:", output_file, "in the directory:", getwd(), "\n")
+  }
+  if (merge_result) {
+    if (is.null(output_path)) {
+      output_path <- "merge_result.csv"
+    }
+    write.csv(merge_result, file = output_path, row.names = FALSE)
+    message(sprintf("Merged results saved to %s", output_path))
   }
 
   # Clear unused variables
