@@ -5,3 +5,4 @@
 inst/doc
 ^file_name\.vcf$
 ^git$
+.RDataTmp
