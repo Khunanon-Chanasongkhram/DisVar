@@ -39,8 +39,8 @@ DisVar <- function(file, GWASdb = TRUE, GRASP = TRUE, GWASCat = TRUE, GAD = TRUE
   rm(required_packages)
 
   # Check if not running on Shiny, validate the file
-  if (!runOnShiny && (!file.exists(file) || !grepl(".vcf$", file, ignore.case = TRUE))) {
-    stop("A valid VCF file (.vcf or .vcf.gz) is required.")
+  if (!runOnShiny && (!file.exists(file) || !grepl("\\.vcf$", file, ignore.case = TRUE))) {
+    stop("A valid VCF file (.vcf) is required.")
   }
 
   # Create a list of selected databases
