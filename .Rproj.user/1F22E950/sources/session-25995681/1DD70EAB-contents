@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+inst/doc
+^file_name\.vcf$
+^git$
+.RDataTmp
+.RDataTmp
+.RDataTmp
